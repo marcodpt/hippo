@@ -317,7 +317,8 @@ const Posts = getPaths(dir).map(path => {
     } else if (Types['datetime'].indexOf(name) >= 0) {
       Post.data[name] = new Date(Post.raw[name]).toLocaleString(Post.lang)
     } else if (Types['date'].indexOf(name) >= 0) {
-      Post.data[name] = new Date(Post.raw[name]).toLocaleDateString(Post.lang)
+      Post.data[name] = new Date(Post.raw[name]+'T12:00:00')
+        .toLocaleDateString(Post.lang)
     } else {
       Post.data[name] = Post.raw[name]
     }
@@ -374,6 +375,7 @@ Posts.forEach(post => {
     post.parents.push(p)
     p = p.parent
   }
+  post.parents.reverse()
   post.level = post.parents.length
   post.root = post.parents[0] || post
   post.children = post.posts.reduce((C, p) => ({
