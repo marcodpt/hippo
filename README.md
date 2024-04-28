@@ -7,7 +7,6 @@ A SSG for Deno
  - Target directory in command line
  - Edit file with command line option
  - default date/datetime automatic
- - slugify with special characteres
  - documentation
  - graphical interface with html editor
  - book theme
