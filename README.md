@@ -63,20 +63,6 @@ To skip this rules and selective use a tag in the posts use the `data-path`
 attribute, it will only be used in posts matching the path.
 The wildcard `*` is allowed.
 
-### data-preserve
-Acceptable in any `post` or `config.html` in any tag that is an imediate child
-of `head` and `body`.
-When a post is builded, the first thing hippo will do is remove every node
-inside the `head` and the `body`, the exceptions are:
- - `main` as imediate child of `body`: this is where you should place the
-content.
- - `title` as imediate child of `head`: this is the title of the post.
- - `meta` as imediate child of `head` that contains `name` and `content`
-attributes and the `config.html` declared a `meta` with same `name` and a
-`data-type` attribute.
-The imediate child of `head` and `body` with a `data-preserve` attribute will
-also not be removed.
-
 ## post: Object
 A variable associated to every file named `index.html` in the site directory.
 
