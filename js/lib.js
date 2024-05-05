@@ -1,3 +1,28 @@
+import {DOMParser} from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts"
+
+const parser = new DOMParser()
+
+const toStr = path => {
+  var str = ''
+  try {
+    str = Deno.readTextFileSync(path)
+  } catch (err) {}
+  return str
+}
+
+const build = html => {
+  var doc = null
+  try {
+    doc = parser.parseFromString(html, "text/html")
+  } catch (err) {}
+  return doc
+}
+
+const parse = path => {
+  const html = toStr(path)
+  return !html ? null : build(html)
+}
+
 const tagName = element => element.nodeType === 1 ?
   element.tagName.toLowerCase() : ''
 
@@ -48,4 +73,40 @@ const sort = (Data, Rule) => {
   }, 0))
 }
 
-export {tagName, slugify, getPaths, sort}
+const read = (doc, names) => ({
+  title: doc.title,
+  lang: doc.documentElement.getAttribute('lang'),
+  main: (doc.body.querySelector('main') || doc.body).innerHTML,
+  meta: names
+    .map(k => doc.head.querySelector(`meta[name="${k}"]`))
+    .filter(meta => meta)
+    .map(meta => ({
+      name: meta.getAttribute('name'),
+      content: meta.getAttribute('content')
+    }))
+    .filter(({content}) => content)
+    .reduce((M, {name, content}) => ({
+      ...M,
+      [name]: content
+    }), {})
+})
+
+const write = ({
+  title,
+  lang,
+  main,
+  meta
+}) => `<!DOCTYPE html>
+<html lang="${lang}">
+  <head>
+    ${Object.keys(meta).map(name =>
+      `<meta name="${name}" content="${meta[name]}"/>`
+    ).join('\n    ')}
+    <title>${title}</title>
+  </head>
+  <body>
+    ${main || ''}
+  </body>
+</html>`
+
+export {toStr, build, parse, tagName, slugify, getPaths, sort, read, write}

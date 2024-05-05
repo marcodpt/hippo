@@ -1,29 +1,16 @@
-import {DOMParser} from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts"
-import {existsSync} from "https://deno.land/std@0.203.0/fs/mod.ts";
 import compile from "https://cdn.jsdelivr.net/gh/marcodpt/tint@2.5.0/template.js"
-import {tagName, slugify, getPaths, sort} from './js/lib.js'
+import {
+  tagName, slugify, getPaths, sort, read, write, toStr, build, parse
+} from './js/lib.js'
 import save from './js/save.js'
 import cnf from './config.js'
-
-const parser = new DOMParser()
-
-const parseHtml = html => parser.parseFromString(html, "text/html")
-
-const parseFile = path => {
-  var html = Deno.readTextFileSync(path)
-  const document = parseHtml(html)
-  if (!document) {
-    throw `${path}: error parsing HTML`
-  }
-  return document
-}
 
 const createFile = (dir, {
   main, lang, title, ...vars
 }) => {
   Deno.mkdirSync(dir, {recursive: true})
-  if (!existsSync(`${dir}/index.html`)) {
-    save(`${dir}/index.html`, parseHtml(`
+  if (!toStr(`${dir}/index.html`)) {
+    save(`${dir}/index.html`, build(`
       <!DOCTYPE html>
       <html lang="${lang || theme.documentElement.getAttribute('lang')}">
         <head>
@@ -41,35 +28,31 @@ const createFile = (dir, {
   }
 }
 
-const matchPath = (route, path) => {
-  const R = (route || '').split('*').filter(r => r)
-  var i = 0
-  return R.reduce((pass, r, p) => {
-    if (pass) {
-      i = path.indexOf(r, i)
-      return (i >= 0 && p > 0) || (i == 0 && p == 0)
-    }
-  }, true)
-}
-
 const getDir = path => {
   const name = '/index.html'
   return path.substr(path.length - name.length) == name ?
     path.substr(0, path.length - name.length + 1) : path
 }
 
-const theme = parseFile(cnf.theme)
+const theme = parse(cnf.theme)
 const main = theme.body.querySelector('main')
-const dir = cnf.dir 
+const dir = cnf.dir
+const names = Object.keys(cnf.meta)
+const edit = toStr(Deno.args[0])
+
+if (edit) {
+  save(cnf.post, build(write(read(parse(Deno.args[0]), names))))
+  console.log('CREATED: '+cnf.post)
+}
 
 //Writing new post
 const create = theme.documentElement.getAttribute('data-create')
 if (create != null) {
   const title = theme.title
   createFile(dir+(create ? create+'/'+slugify(title) : ''), {
-    main: main.outerHTML,
+    main: main.innerHTML,
     title,
-    ...Object.keys(cnf.meta).reduce((D, name) => ({
+    ...names.reduce((D, name) => ({
       ...D,
       [name]: cnf.meta[name].default
     }), {})
@@ -78,7 +61,7 @@ if (create != null) {
 
 //Cleanup, fix and build taxonomies
 getPaths(dir).forEach(path => {
-  const doc = parseFile(path)
+  const doc = parse(path)
 
   if (!doc.documentElement.getAttribute('lang')) {
     doc.documentElement.setAttribute('lang',
@@ -124,7 +107,7 @@ getPaths(dir).forEach(path => {
 
 //Read data
 const Posts = getPaths(dir).map(path => {
-  const doc = parseFile(path)
+  const doc = parse(path)
   const Post = {}
 
   Post.title = doc.title
@@ -135,7 +118,7 @@ const Posts = getPaths(dir).map(path => {
   Post.raw = {}
   Post.data = {}
   Post.taxonomies = {}
-  Object.keys(cnf.meta)
+  names
     .map(k => doc.head.querySelector(`meta[name="${k}"]`))
     .filter(meta => meta)
     .map(meta => ({
@@ -226,7 +209,7 @@ Posts.forEach(post => {
 
 //Render
 Posts.forEach(post => {
-  const doc = parseFile(dir+post.path)
+  const doc = parse(dir+post.path)
   const D = getDir(post.path).split('/').filter(d => d)
   Posts.forEach(p => {
     p.relative = ''
@@ -244,6 +227,17 @@ Posts.forEach(post => {
     p.folder = p.relative
     p.relative += 'index.html'
   })
+
+  const matchPath = (route, path) => {
+    const R = (route || '').split('*').filter(r => r)
+    var i = 0
+    return R.reduce((pass, r, p) => {
+      if (pass) {
+        i = path.indexOf(r, i)
+        return (i >= 0 && p > 0) || (i == 0 && p == 0)
+      }
+    }, true)
+  }
 
   const filterNode = (el, deep) => {
     const p = el.getAttribute('data-path')
@@ -278,14 +272,6 @@ Posts.forEach(post => {
       doc.head.append(target)
     }
   }
-
-  const m = doc.body.querySelector('main')
-  Array.from(m.attributes).forEach(({nodeName}) => {
-    m.removeAttribute(nodeName)
-  })
-  Array.from(main.attributes).forEach(({nodeName}) => {
-    m.setAttribute(nodeName, main.getAttribute(nodeName))
-  })
 
   el = main
   while (el?.previousElementSibling) {

@@ -1,6 +1,4 @@
-import {tagName} from './lib.js'
-
-const isSelfClosing = element => [
+const isSelfClosing = name => [
   'area',
   'base',
   'br',
@@ -15,16 +13,7 @@ const isSelfClosing = element => [
   'source',
   'track',
   'wbr'
-].indexOf(tagName(element)) >= 0
-
-const getAttributes = element => Array.from(element.attributes || [])
-  .reduce((X, {
-    name,
-    value
-  }) => ({
-    ...X,
-    [name]: value
-  }), {})
+].indexOf(name) >= 0
 
 const print = (element, ident) => {
   const MAX_LENGTH = 80
@@ -32,10 +21,16 @@ const print = (element, ident) => {
     return element.textContent
   }
   ident = (ident || '')
-  const A = getAttributes(element)
+  const A = Array.from(element.attributes || []).reduce((X, {
+    name,
+    value
+  }) => ({
+    ...X,
+    [name]: value
+  }), {})
   const Attrs = Object.keys(A).map(k => `${k}="${A[k]}"`)
   var attrs = Attrs.join(' ')
-  const name = tagName(element)
+  const name = element.tagName.toLowerCase()
 
   if (attrs.length + ident.length + name.length + 3 > MAX_LENGTH) {
     attrs = '\n'+Attrs.map(attr => ident+'  '+attr).join('\n')+'\n'+ident
@@ -47,7 +42,7 @@ const print = (element, ident) => {
     (name == 'template' ? element.content : element).childNodes
   )
 
-  if (isSelfClosing(element)) {
+  if (isSelfClosing(name)) {
     return s+'/>'
   } else {
     s += '>'
@@ -65,7 +60,7 @@ const print = (element, ident) => {
       return name ? s+'\n'+content+'\n'+ident+`</${name}>` : content
     }
   }
-  return `<${element.tagName.toLowerCase()}`
+  return `<${name}`
 }
 
 export default (path, document) => {
