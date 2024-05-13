@@ -77,7 +77,7 @@ const read = (doc, names) => ({
   title: doc.title,
   lang: doc.documentElement.getAttribute('lang'),
   main: (doc.body.querySelector('main') || doc.body).innerHTML,
-  meta: names
+  meta: (names || [])
     .map(k => doc.head.querySelector(`meta[name="${k}"]`))
     .filter(meta => meta)
     .map(meta => ({
@@ -109,4 +109,8 @@ const write = ({
   </body>
 </html>`
 
-export {toStr, build, parse, tagName, slugify, getPaths, sort, read, write}
+const toPath = str => str.split('/').filter(p => p).join('/')
+
+export {
+  toStr, build, parse, tagName, slugify, getPaths, sort, read, write, toPath
+}

@@ -1,30 +1,26 @@
 import compile from "https://cdn.jsdelivr.net/gh/marcodpt/tint@2.5.0/template.js"
 import {
-  tagName, slugify, getPaths, sort, read, write, toStr, build, parse
+  tagName, slugify, getPaths, sort, read, write, toStr, build, parse, toPath
 } from './js/lib.js'
 import save from './js/save.js'
 import cnf from './config.js'
 
-const createFile = (dir, {
-  main, lang, title, ...vars
-}) => {
+const theme = parse(cnf.theme)
+const base = read(theme)
+const main = theme.body.querySelector('main')
+const dir = cnf.dir
+const names = Object.keys(cnf.meta)
+
+const createFile = (dir, data, force) => {
   Deno.mkdirSync(dir, {recursive: true})
-  if (!toStr(`${dir}/index.html`)) {
-    save(`${dir}/index.html`, build(`
-      <!DOCTYPE html>
-      <html lang="${lang || theme.documentElement.getAttribute('lang')}">
-        <head>
-          ${Object.keys(vars).filter(name => vars[name]).map(name =>
-            `<meta name="${name}" content="${vars[name]}"/>`
-          ).join('\n')}
-          <title>${title || theme.title}</title>
-        </head>
-        <body>
-          ${main || '<main></main>'}
-        </body>
-      </html>
-    `))
-    console.log(`NEW FILE: ${dir}/index.html`)
+  if (force || !toStr(`${dir}/index.html`)) {
+    save(`${dir}/index.html`, build(write({
+      ...base,
+      ...data
+    })))
+    if (!force) {
+      console.log(`NEW FILE: ${dir}/index.html`)
+    }
   }
 }
 
@@ -34,29 +30,18 @@ const getDir = path => {
     path.substr(0, path.length - name.length + 1) : path
 }
 
-const theme = parse(cnf.theme)
-const main = theme.body.querySelector('main')
-const dir = cnf.dir
-const names = Object.keys(cnf.meta)
-const edit = toStr(Deno.args[0])
-
-if (edit) {
-  save(cnf.post, build(write(read(parse(Deno.args[0]), names))))
+//Create, edit, and save new file
+const arg = Deno.args[0]
+if (arg && toStr(arg)) {
+  save(cnf.post, build(write(read(parse(arg), names))))
   console.log('CREATED: '+cnf.post)
-}
-
-//Writing new post
-const create = theme.documentElement.getAttribute('data-create')
-if (create != null) {
-  const title = theme.title
-  createFile(dir+(create ? create+'/'+slugify(title) : ''), {
-    main: main.innerHTML,
-    title,
-    ...names.reduce((D, name) => ({
-      ...D,
-      [name]: cnf.meta[name].default
-    }), {})
-  })
+} else if (toStr(cnf.post)) {
+  const post = build(toStr(cnf.post))
+  const data = read(post, names)
+  const directory = toPath(arg ? arg+'/'+slugify(data.title) : dir)
+  const msg = toStr(directory+'/index.html') ? 'EDITED' : 'CREATED'
+  createFile(directory, data, true)
+  console.log(msg+': '+directory+'/index.html')
 }
 
 //Cleanup, fix and build taxonomies
@@ -64,9 +49,7 @@ getPaths(dir).forEach(path => {
   const doc = parse(path)
 
   if (!doc.documentElement.getAttribute('lang')) {
-    doc.documentElement.setAttribute('lang',
-      theme.documentElement.getAttribute('lang')
-    )
+    doc.documentElement.setAttribute('lang', base.lang)
   }
 
   doc.head.childNodes.forEach(child => {
@@ -95,12 +78,19 @@ getPaths(dir).forEach(path => {
     }
   }, {})
 
-  doc.body.childNodes.forEach(child => {
-    const tag = tagName(child)
-    if (tag && tag != 'main') {
-      doc.body.removeChild(child)
-    }
-  })
+  if (doc.body.querySelector('main')) {
+    doc.body.childNodes.forEach(child => {
+      const tag = tagName(child)
+      if (tag && tag != 'main') {
+        doc.body.removeChild(child)
+      }
+    })
+  } else {
+    const m = main.cloneNode(false)
+    m.innerHTML = doc.body.innerHTML
+    doc.body.innerHTML = ''
+    doc.body.appendChild(m)
+  }
 
   save(path, doc)
 })
