@@ -2,13 +2,7 @@
 A SSG for Deno
 
 ## TODO
- - Templates folder in command line
- - Tags folder to be added in every template in command line
- - Target directory in command line
- - Edit file with command line option
- - default date/datetime automatic
  - documentation
- - graphical interface with html editor
  - book theme
  - blog theme
 
