@@ -219,70 +219,23 @@ import(Deno.cwd()+'/config.js').then(mod => {
       p.relative += 'index.html'
     })
 
-    const matchPath = (route, path) => {
-      const R = (route || '').split('*').filter(r => r)
-      var i = 0
-      return R.reduce((pass, r, p) => {
-        if (pass) {
-          i = path.indexOf(r, i)
-          return (i >= 0 && p > 0) || (i == 0 && p == 0)
-        }
-      }, true)
-    }
-
-    const filterNode = (el, deep) => {
-      const p = el.getAttribute('data-path')
-      const tag = tagName(el)
-      const name = el.getAttribute('name')
-
-      if (tag == 'meta' && (cnf.meta[name] || name) && !p) {
-        return null
-      } else if (tag == 'template' && !p) {
-        return null
-      } else if (matchPath(p, post.path)) {
-        const target = el.cloneNode(true)
-        target.removeAttribute('data-path')
-        return target
-      }
-    }
-
     var el = theme.head.querySelector('title')
     while (el?.previousElementSibling) {
       el = el.previousElementSibling
-      const target = filterNode(el)
-      if (target) {
-        doc.head.prepend(target)
-      }
+      doc.head.prepend(el.cloneNode())
     }
 
     el = theme.head.querySelector('title')
     while (el?.nextElementSibling) {
       el = el.nextElementSibling
-      const target = filterNode(el)
-      if (target) {
-        doc.head.append(target)
-      }
+      doc.head.append(el.cloneNode())
     }
 
-    el = main
-    while (el?.previousElementSibling) {
-      el = el.previousElementSibling
-      const target = filterNode(el)
-      if (target) {
-        doc.body.prepend(target)
-        compile(target, null, theme)(post)
-      }
-    }
-
-    el = main
-    while (el?.nextElementSibling) {
-      el = el.nextElementSibling
-      const target = filterNode(el)
-      if (target) {
-        doc.body.append(target)
-        compile(target, null, theme)(post)
-      }
-    }
+    const target = theme.body.cloneNode(true)
+    target.querySelector('main').innerHTML =
+      (doc.body.querySelector('main') || doc.body).innerHTML
+    doc.body.replaceWith(target)
+    compile(target, null, theme)(post)
 
     save(dir+post.path, doc)
   })
