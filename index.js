@@ -70,7 +70,7 @@ import(Deno.cwd()+'/config.js').then(mod => {
     console.log('CREATED: '+cnf.post)
   } else if (action == 'edit') {
     save(cnf.post, build(write({
-      ...read(parse(path), names),
+      ...read(parse(path), names, cnf.selector),
       path: getDir(path)
     })))
     console.log('CREATED: '+cnf.post)
