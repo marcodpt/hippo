@@ -1,7 +1,10 @@
-# ![](favicon.ico) Hippo
+# ![](docs/favicon.ico) Hippo
 A SSG for Deno
 
 ## TODO
+ - allow to edit using editor on terminal and remove save command
+ - pass selector in command line
+ - pass config file in command line
  - documentation
  - book theme
  - blog theme

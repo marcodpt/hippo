@@ -33,7 +33,7 @@ if (cli.h === true || cli.help === true || !cli._[0]) {
 
 import(Deno.cwd()+'/config.js').then(mod => {
   const cnf = mod.default
-  const theme = parse(cnf.theme)
+  const theme = parse(cnf.theme.path)
   const base = read(theme)
   const main = theme.body.querySelector('main')
   const dir = cnf.dir
@@ -143,6 +143,7 @@ import(Deno.cwd()+'/config.js').then(mod => {
 
     Post.data = cnf.data(meta, extra)
     Post.taxonomies = {}
+    Post.theme = cnf.theme
     Object.keys(Post.data)
       .filter(k => Post.data[k] instanceof Array)
       .forEach(taxonomy => {
