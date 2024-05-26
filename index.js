@@ -1,8 +1,35 @@
 import compile from "https://cdn.jsdelivr.net/gh/marcodpt/tint@2.5.0/template.js"
 import {
-  tagName, slugify, getPaths, sort, read, write, toStr, build, parse, toPath
+  tagName,
+  slugify,
+  getPaths,
+  sort,
+  read,
+  write,
+  toStr,
+  build,
+  parse,
+  toPath,
+  getDir
 } from './js/lib.js'
 import save from './js/save.js'
+import {parse as parseArgs} from "https://deno.land/std/flags/mod.ts"
+
+const cli = parseArgs(Deno.args)
+
+if (cli.h === true || cli.help === true || !cli._[0]) {
+  console.log('Hippo SSG')
+  console.log('hippo [command] [path]')
+  console.log('\nhippo new')
+  console.log('  Creates file with defaults')
+  console.log('\nhippo edit [path]')
+  console.log('  Edit file in path')
+  console.log('\nhippo save [path]')
+  console.log('  Save file in path')
+  console.log('\nhippo build')
+  console.log('  Build site')
+  Deno.exit(0)
+}
 
 import(Deno.cwd()+'/config.js').then(mod => {
   const cnf = mod.default
@@ -10,7 +37,7 @@ import(Deno.cwd()+'/config.js').then(mod => {
   const base = read(theme)
   const main = theme.body.querySelector('main')
   const dir = cnf.dir
-  const names = Object.keys(cnf.meta)
+  const names = Object.keys(cnf.default)
 
   const createFile = (dir, data, force) => {
     Deno.mkdirSync(dir, {recursive: true})
@@ -25,24 +52,47 @@ import(Deno.cwd()+'/config.js').then(mod => {
     }
   }
 
-  const getDir = path => {
-    const name = '/index.html'
-    return path.substr(path.length - name.length) == name ?
-      path.substr(0, path.length - name.length + 1) : path
-  }
-
   //Create, edit, and save new file
-  const arg = Deno.args[0]
-  if (arg && toStr(arg)) {
-    save(cnf.post, build(write(read(parse(arg), names))))
+  const action = cli._[0]
+  const path = cli._[1]
+
+  var stop = true
+  if (action == 'new' || (action == 'edit' &&
+    (!path || path.split('/').pop() != 'index.html' || !toStr(path)
+  ))) {
+    save(cnf.post, build(write({
+      ...base,
+      meta: names.reduce((M, name) => ({
+        ...M,
+        [name]: cnf.default[name]
+      }), {})
+    })))
     console.log('CREATED: '+cnf.post)
-  } else if (toStr(cnf.post)) {
+  } else if (action == 'edit') {
+    save(cnf.post, build(write({
+      ...read(parse(path), names),
+      path: getDir(path)
+    })))
+    console.log('CREATED: '+cnf.post)
+  } else if (action == 'save') {
     const post = build(toStr(cnf.post))
     const data = read(post, names)
-    const directory = toPath(arg ? arg+'/'+slugify(data.title) : dir)
+    const directory = toPath(
+      path ? path+'/'+slugify(data.title) :
+      data.path ? data.path :
+      dir
+    )
     const msg = toStr(directory+'/index.html') ? 'EDITED' : 'CREATED'
+    delete data.path
     createFile(directory, data, true)
+    Deno.removeSync(cnf.post)
     console.log(msg+': '+directory+'/index.html')
+  } else {
+    console.log('BUILDING: '+cnf.dir)
+    stop = false
+  }
+  if (stop) {
+    return
   }
 
   //Cleanup, fix and build taxonomies
@@ -58,18 +108,8 @@ import(Deno.cwd()+'/config.js').then(mod => {
       if (tag == 'meta') {
         const name = child.getAttribute('name')
         const content = child.getAttribute('content')
-        const M = cnf.meta[name]
-        if (!name || !content || M == null) {
+        if (!name || !content || names.indexOf(name) < 0) {
           doc.head.removeChild(child)
-        } else if (M.builder) {
-          createFile(dir+'/'+name, {
-            title: M.title || name
-          })
-          M.builder(content).forEach(item => {
-            createFile(dir+'/'+name+'/'+slugify(item), {
-              title: item
-            })
-          })
         }
       } else if (tag == 'title') {
         doc.querySelector('title').textContent = (doc.title || '')
@@ -98,41 +138,28 @@ import(Deno.cwd()+'/config.js').then(mod => {
 
   //Read data
   const Posts = getPaths(dir).map(path => {
-    const doc = parse(path)
-    const Post = {}
+    const Post = read(parse(path), names)
+    const {meta, ...extra} = Post
 
-    Post.title = doc.title
-    Post.lang = doc.documentElement.getAttribute('lang')
+    Post.data = cnf.data(meta, extra)
+    Post.taxonomies = {}
+    Object.keys(Post.data)
+      .filter(k => Post.data[k] instanceof Array)
+      .forEach(taxonomy => {
+        Post.taxonomies[taxonomy] = Post.data[taxonomy]
+        const slug = slugify(taxonomy)
+        createFile(dir+'/'+slug, {
+          title: taxonomy
+        })
+        Post.data[k].forEach(item => {
+          createFile(dir+'/'+slug+'/'+slugify(item), {
+            title: item
+          })
+        })
+      })
+
     Post.path = path.substr(dir.length)
     Post.relative = ''
-
-    Post.raw = {}
-    Post.data = {}
-    Post.taxonomies = {}
-    names
-      .map(k => doc.head.querySelector(`meta[name="${k}"]`))
-      .filter(meta => meta)
-      .map(meta => ({
-        name: meta.getAttribute('name'),
-        content: meta.getAttribute('content')
-      }))
-      .filter(({content}) => content)
-      .map(({name, content}) => ({
-        name,
-        content,
-        data: (cnf.meta[name].formatter || (x => x))(content, Post.lang),
-        taxonomies: (cnf.meta[name].builder || (() => []))(content)
-      }))
-      .forEach(({
-        name,
-        content,
-        data,
-        taxonomies
-      }) => {
-        Post.raw[name] = content
-        Post.data[name] = data
-        Post.taxonomies[name] = taxonomies
-      })
     Post.posts = []
     Post.count = 0
     Post.first = null
@@ -184,9 +211,9 @@ import(Deno.cwd()+'/config.js').then(mod => {
     post.count = n
     const T = post.taxonomies
     Object.keys(T).forEach(name => {
-      T[name] = T[name].map(item => Posts
-        .filter(p => p.path === '/'+name+'/'+slugify(item)+'/index.html')[0]
-      )
+      T[name] = T[name].map(item => Posts.filter(
+        p => p.path === '/'+slugify(name)+'/'+slugify(item)+'/index.html'
+      )[0])
     })
     const first = n ? post.posts[0] : null
     const last = n ? post.posts[n - 1] : null

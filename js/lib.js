@@ -69,11 +69,13 @@ const sort = (Data, Rule) => {
     if (s == '-' || s == '+') {
       k = k.substr(1)
     }
-    return r ? r : i * (a.raw[k] > b.raw[k] ? 1 : b.raw[k] > a.raw[k] ? -1 : 0)
+    return r ? r :
+      i * (a.meta[k] > b.meta[k] ? 1 : b.meta[k] > a.meta[k] ? -1 : 0)
   }, 0))
 }
 
 const read = (doc, names) => ({
+  path: doc.documentElement.getAttribute('data-path'),
   title: doc.title,
   lang: doc.documentElement.getAttribute('lang'),
   main: (doc.body.querySelector('main') || doc.body).innerHTML,
@@ -92,25 +94,40 @@ const read = (doc, names) => ({
 })
 
 const write = ({
+  path,
   title,
   lang,
   main,
   meta
 }) => `<!DOCTYPE html>
-<html lang="${lang}">
+<html lang="${lang}"${path ? ` data-path="${path}"` : ''}>
   <head>
     ${Object.keys(meta).map(name =>
       `<meta name="${name}" content="${meta[name]}"/>`
     ).join('\n    ')}
     <title>${title}</title>
   </head>
-  <body>
-    ${main || ''}
-  </body>
+  <body>${(main || '').trim()}</body>
 </html>`
 
 const toPath = str => str.split('/').filter(p => p).join('/')
 
+const getDir = path => {
+  const name = '/index.html'
+  return path.substr(path.length - name.length) == name ?
+    path.substr(0, path.length - name.length + 1) : path
+}
+
 export {
-  toStr, build, parse, tagName, slugify, getPaths, sort, read, write, toPath
+  toStr,
+  build,
+  parse,
+  tagName,
+  slugify,
+  getPaths,
+  sort,
+  read,
+  write,
+  toPath,
+  getDir
 }

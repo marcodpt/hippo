@@ -11,52 +11,6 @@ A SSG for Deno
 deno run --allow-read --allow-write index.js
 ```
 
-## Attributes
-Some special attributes used to configure the behavior of `hippo` when
-rebuilding your site
-
-### data-site
-Only acceptable in `config.html` in the `html` tag.
-The folder of your current site.
-
-### data-sort
-Only acceptable in `config.html` in the `html` tag.
-The order where posts should be sorted separated with comma(,) and is allowed
-before each field a minus(-) for `DESC` sort and a plus(+) for `ASC` sort.
-All the properties are sorted as provided in the post before appling any
-formatter.
-
-### data-create
-Only acceptable in `config.html` in the `html` tag.
-The directory of a new file.
-The new file will use the current `title`, `meta`, `main` and imediate child of
-`head` and `body` with `data-preserve` attribute.
-
-### data-type
-Only acceptable in `config.html` in the `meta` tag with `name` attribute and
-imediate child of `head`.
-This define the data type of the content, and will be formatted:
- - taxonomy: A type used to build taxonomies formated after sorting.
- - date: Uses `toLocaleDateString` combined with `lang` attribute to format
-ISO dates after sorting.
- - datetime: Uses `toLocaleString` combined with `lang` attribute to format
-ISO dates after sorting.
- - integer: parseInt before sorting then uses `toLocaleString`.
- - number: parseFloat before sorting then uses `toLocaleString`.
- - bool: blank or 'false' string will be `false`, everything else `true`.
-Formatter applied before sorting.
- - blank or everything else will keep raw format.
-
-### data-path
-Only acceptable in `config.html` in tags imediate child of `head` or `body`.
-Every `head` imediate child other than `title` and `meta` with `data-type` will
-be prepend in post if it appear before `title` or append if it appears after.
-Every `body` child other than `template` and `main` will be prepend in post if
-it appear before `main` or append if it appears after.
-To skip this rules and selective use a tag in the posts use the `data-path`
-attribute, it will only be used in posts matching the path.
-The wildcard `*` is allowed.
-
 ## post: Object
 A variable associated to every file named `index.html` in the site directory.
 
@@ -72,15 +26,13 @@ The absolute path in the site directory.
 ### relative: String
 The relative path to the current post or empty string in case of been itself.
 
-### raw: Object
+### meta: Object
 An object with all the meta tags, where:
  - the keys are `name` attribute.
  - the values are the `content` attribute parsed but not formatted.
 
 ### data: Object
-An object with all the non taxonomies meta tags, where:
- - the keys are `name` attribute.
- - the values are the `content` attribute formatted as especified in `data-type`.
+An object with the meta tags transformed with `data` function defined by user.
 
 ### taxonomies
 An object with all the taxonomies meta tags, where:
