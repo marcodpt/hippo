@@ -152,12 +152,13 @@ import(Deno.cwd()+'/config.js').then(mod => {
         createFile(dir+'/'+slug, {
           title: taxonomy
         })
-        Post.data[k].forEach(item => {
+        Post.data[taxonomy].forEach(item => {
           createFile(dir+'/'+slug+'/'+slugify(item), {
             title: item
           })
         })
       })
+    console.log(Post.data)
 
     Post.path = path.substr(dir.length)
     Post.relative = ''
