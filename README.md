@@ -3,6 +3,10 @@ A SSG for Deno
 
 ## TODO
  - allow to edit using editor on terminal and remove save command
+ - theme variables
+ - lazy compute data properties (problem with image path)
+ - allow to use query selector on main while generating data (create description based on first p text content)
+ - update properties
  - pass selector in command line
  - pass config file in command line
  - documentation
@@ -28,6 +32,9 @@ The absolute path in the site directory.
 
 ### relative: String
 The relative path to the current post or empty string in case of been itself.
+
+### folder: String
+The relative path to the directory of current post.
 
 ### meta: Object
 An object with all the meta tags, where:

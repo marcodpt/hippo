@@ -59,6 +59,33 @@
     </section>
     <main class="container mx-auto my-5">
     </main>
+    <div
+      class="container card mx-auto my-3 pt-3"
+      style="max-width:600px"
+      each:="posts"
+    >
+      <a href:="relative" class="text-reset text-decoration-none">
+        <img
+          with:="data"
+          if:="og:image"
+          src:="folder" src="image.jpg"
+          class="card-img-top"
+          alt:="title"
+        />
+        <div class="card-body">
+          <h5 class="card-title" text:="title"></h5>
+          <p class="card-text">
+            <template with:="meta">
+              <template if:="authors" text:="authors"></template>
+              <template if:="authors">
+                <template if:="date"> - </template>
+              </template>
+            </template>
+            <time with:="data" if:="date" text:="date"></time>
+          </p>
+        </div>
+      </a>
+    </div>
     <footer
       with:="theme"
       class="mt-auto p-5 bg-light text-center"

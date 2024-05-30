@@ -11,7 +11,7 @@ export default ({
   },
   data: ({date, tags, authors, ...meta}, {lang}) => ({
     ...meta,
-    date: date,
+    date: date ? new Date(date).toLocaleDateString() : null,
     tags: (tags || '').split(',').map(k => k.trim()).filter(k => k),
     authors: (authors || '').split(',').map(k => k.trim()).filter(k => k)
   }),

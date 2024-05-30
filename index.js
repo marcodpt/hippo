@@ -158,7 +158,6 @@ import(Deno.cwd()+'/config.js').then(mod => {
           })
         })
       })
-    console.log(Post.data)
 
     Post.path = path.substr(dir.length)
     Post.relative = ''
