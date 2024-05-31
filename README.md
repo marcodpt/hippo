@@ -4,7 +4,7 @@ A SSG for Deno
 ## TODO
  - rss/atom feed
  - do not require files named index.html, any .html file should work
- - theme variables
+ - theme variables should compile before rendering and isolated
  - lazy compute data properties (problem with image path)
  - allow to use query selector on main while generating data (create description based on first p text content)
  - update meta properties and taxonomies

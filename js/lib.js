@@ -2,14 +2,6 @@ import {DOMParser} from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts"
 
 const parser = new DOMParser()
 
-const toStr = path => {
-  var str = ''
-  try {
-    str = Deno.readTextFileSync(path)
-  } catch (err) {}
-  return str
-}
-
 const build = html => {
   var doc = null
   try {
@@ -19,7 +11,7 @@ const build = html => {
 }
 
 const parse = path => {
-  const html = toStr(path)
+  const html = Deno.readTextFileSync(path)
   return !html ? null : build(html)
 }
 
@@ -119,7 +111,6 @@ const getDir = path => {
 }
 
 export {
-  toStr,
   build,
   parse,
   tagName,

@@ -6,7 +6,6 @@ import {
   sort,
   read,
   write,
-  toStr,
   build,
   parse,
   toPath,
@@ -14,6 +13,7 @@ import {
 } from './js/lib.js'
 import save from './js/save.js'
 import {parse as parseArgs} from "https://deno.land/std/flags/mod.ts"
+import {existsSync} from "https://deno.land/std@0.224.0/fs/exists.ts";
 
 const cli = parseArgs(Deno.args)
 
@@ -33,7 +33,7 @@ import(Deno.cwd()+'/config.js').then(mod => {
 
   const createFile = (dir, data, force) => {
     Deno.mkdirSync(dir, {recursive: true})
-    if (force || !toStr(`${dir}/index.html`)) {
+    if (force || !existsSync(`${dir}/index.html`)) {
       save(`${dir}/index.html`, build(write({
         ...base,
         ...data
@@ -45,20 +45,30 @@ import(Deno.cwd()+'/config.js').then(mod => {
   }
 
   //Create, edit, and save new file
-  const path = cli._[0]
-
-  if (path) {
-    save(path, build(write(!toStr(path) ? {
-      ...base,
-      meta: names.reduce((M, name) => ({
-        ...M,
-        [name]: cnf.default[name]
-      }), {})
-    } : read(parse(path), names, cnf.selector))))
+  if (cli._[0]) {
+    var path = ''
+    var directory = ''
+    if (existsSync(cli._[0], {isFile: true})) {
+      path = cli._[0]
+      save(path, build(write(read(parse(path), names, cnf.selector))))
+    } else {
+      directory = cli._[0]
+      path = '/tmp/hippo.html'
+      save(path, build(write({
+        ...base,
+        meta: names.reduce((M, name) => ({
+          ...M,
+          [name]: cnf.default[name]
+        }), {})
+      })))
+    }
     new Deno.Command(Deno.env.get('EDITOR'), {
       args: [path]
     }).spawn()
-    return
+    if (directory) {
+      const data = read(parse(path), names, cnf.selector)
+      createFile(directory+'/'+slugify(data.title), data)
+    }
   }
   console.log('BUILDING: '+cnf.dir)
 
