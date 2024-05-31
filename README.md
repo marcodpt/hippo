@@ -2,6 +2,7 @@
 A SSG for Deno
 
 ## TODO
+ - how to create custom tags?
  - rss/atom feed
  - do not require files named index.html, any .html file should work
  - theme variables should compile before rendering and isolated
