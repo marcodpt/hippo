@@ -3,6 +3,7 @@ export default ({
   dir: 'docs',
   sort: ['-date'],
   selector: 'main',
+  taxonomies: ['tags', 'authors'],
   default: {
     date: new Date().toISOString().substr(0, 10),
     tags: '',

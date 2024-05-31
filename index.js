@@ -95,7 +95,6 @@ import(Deno.cwd()+'/config.js').then(mod => {
     return
   }
 
-  //Cleanup, fix and build taxonomies
   getPaths(dir).forEach(path => {
     const doc = parse(path)
 
@@ -136,29 +135,47 @@ import(Deno.cwd()+'/config.js').then(mod => {
     save(path, doc)
   })
 
+  //Cleanup, fix and build taxonomies
+  const Taxonomies = {}
+  const buildTaxonomy = meta => (meta || '').split(',')
+    .map(k => k.trim()).filter(k => k)
+  const X = cnf.taxonomies || []
+
+  getPaths(dir).map(path => {
+    const Post = read(parse(path), names)
+
+    X.forEach(taxonomy => {
+      const slug = slugify(taxonomy)
+      if (Taxonomies[slug] == null) {
+        Taxonomies[slug] = {}
+      }
+      createFile(dir+'/'+slug, {
+        title: taxonomy
+      })
+      buildTaxonomy(Post.meta[taxonomy]).forEach(item => {
+        const sluged = slugify(item)
+        Taxonomies[slug][sluged] = []
+        createFile(dir+'/'+slug+'/'+sluged, {
+          title: item
+        })
+      })
+    })
+  })
+
   //Read data
   const Posts = getPaths(dir).map(path => {
     const Post = read(parse(path), names)
     const {meta, ...extra} = Post
 
-    Post.data = cnf.data(meta, extra)
-    Post.taxonomies = {}
-    Post.theme = cnf.theme
-    Object.keys(Post.data)
-      .filter(k => Post.data[k] instanceof Array)
-      .forEach(taxonomy => {
-        Post.taxonomies[taxonomy] = Post.data[taxonomy]
-        const slug = slugify(taxonomy)
-        createFile(dir+'/'+slug, {
-          title: taxonomy
-        })
-        Post.data[taxonomy].forEach(item => {
-          createFile(dir+'/'+slug+'/'+slugify(item), {
-            title: item
-          })
-        })
+    X.forEach(taxonomy => {
+      const slug = slugify(taxonomy)
+      buildTaxonomy(meta[taxonomy]).forEach(item => {
+        Taxonomies[slug][slugify(item)].push(Post)
       })
+    })
 
+    Post.data = cnf.data(meta, extra)
+    Post.theme = cnf.theme
     Post.path = path.substr(dir.length)
     Post.relative = ''
     Post.posts = []
@@ -204,18 +221,22 @@ import(Deno.cwd()+'/config.js').then(mod => {
     post.parents.reverse()
     post.level = post.parents.length
     post.root = post.parents[0] || post
+
+    Object.keys(Taxonomies).forEach(slug => {
+      const T = Taxonomies[slug]
+      Object.keys(T).forEach(sluged => {
+        if (post.path === `/${slug}/${sluged}/index.html`) {
+          post.posts = post.posts.concat(T[sluged])
+        }
+      })
+    })
+
     post.children = post.posts.reduce((C, p) => ({
       ...C,
       [slugify(p.title)]: p
     }), {})
     const n = post.posts.length
     post.count = n
-    const T = post.taxonomies
-    Object.keys(T).forEach(name => {
-      T[name] = T[name].map(item => Posts.filter(
-        p => p.path === '/'+slugify(name)+'/'+slugify(item)+'/index.html'
-      )[0])
-    })
     const first = n ? post.posts[0] : null
     const last = n ? post.posts[n - 1] : null
     post.posts.forEach((p, i) => {

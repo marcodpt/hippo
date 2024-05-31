@@ -2,6 +2,8 @@
 A SSG for Deno
 
 ## TODO
+ - rss/atom feed
+ - do not require files named index.html, any .html file should work
  - allow to edit using editor on terminal and remove save command
  - theme variables
  - lazy compute data properties (problem with image path)
@@ -43,12 +45,6 @@ An object with all the meta tags, where:
 
 ### data: Object
 An object with the meta tags transformed with `data` function defined by user.
-
-### taxonomies
-An object with all the taxonomies meta tags, where:
- - the keys are `name` attribute.
- - the values are the `post` array associated with the items of the taxonomy
-in the exactly same order as was in the current `post`.
 
 ### posts: Array
 Array of children with all itens been an object `post` with all this variables.
