@@ -4,11 +4,10 @@ A SSG for Deno
 ## TODO
  - rss/atom feed
  - do not require files named index.html, any .html file should work
- - allow to edit using editor on terminal and remove save command
  - theme variables
  - lazy compute data properties (problem with image path)
  - allow to use query selector on main while generating data (create description based on first p text content)
- - update properties
+ - update meta properties and taxonomies
  - pass selector in command line
  - pass config file in command line
  - documentation
@@ -17,7 +16,7 @@ A SSG for Deno
 
 ## run
 ```
-deno run --allow-read --allow-write index.js
+deno run --allow-read --allow-write --allow-run --allow-env index.js
 ```
 
 ## post: Object

@@ -1,5 +1,4 @@
 export default ({
-  post: 'post.html',
   dir: 'docs',
   sort: ['-date'],
   selector: 'main',

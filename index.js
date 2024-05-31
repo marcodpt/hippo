@@ -17,17 +17,9 @@ import {parse as parseArgs} from "https://deno.land/std/flags/mod.ts"
 
 const cli = parseArgs(Deno.args)
 
-if (cli.h === true || cli.help === true || !cli._[0]) {
+if (cli.h === true || cli.help === true) {
   console.log('Hippo SSG')
-  console.log('hippo [command] [path]')
-  console.log('\nhippo new')
-  console.log('  Creates file with defaults')
-  console.log('\nhippo edit [path]')
-  console.log('  Edit file in path')
-  console.log('\nhippo save [path]')
-  console.log('  Save file in path')
-  console.log('\nhippo build')
-  console.log('  Build site')
+  console.log('hippo [path]')
   Deno.exit(0)
 }
 
@@ -53,47 +45,22 @@ import(Deno.cwd()+'/config.js').then(mod => {
   }
 
   //Create, edit, and save new file
-  const action = cli._[0]
-  const path = cli._[1]
+  const path = cli._[0]
 
-  var stop = true
-  if (action == 'new' || (action == 'edit' &&
-    (!path || path.split('/').pop() != 'index.html' || !toStr(path)
-  ))) {
-    save(cnf.post, build(write({
+  if (path) {
+    save(path, build(write(!toStr(path) ? {
       ...base,
       meta: names.reduce((M, name) => ({
         ...M,
         [name]: cnf.default[name]
       }), {})
-    })))
-    console.log('CREATED: '+cnf.post)
-  } else if (action == 'edit') {
-    save(cnf.post, build(write({
-      ...read(parse(path), names, cnf.selector),
-      path: getDir(path)
-    })))
-    console.log('CREATED: '+cnf.post)
-  } else if (action == 'save') {
-    const post = build(toStr(cnf.post))
-    const data = read(post, names)
-    const directory = toPath(
-      path ? path+'/'+slugify(data.title) :
-      data.path ? data.path :
-      dir
-    )
-    const msg = toStr(directory+'/index.html') ? 'EDITED' : 'CREATED'
-    delete data.path
-    createFile(directory, data, true)
-    Deno.removeSync(cnf.post)
-    console.log(msg+': '+directory+'/index.html')
-  } else {
-    console.log('BUILDING: '+cnf.dir)
-    stop = false
-  }
-  if (stop) {
+    } : read(parse(path), names, cnf.selector))))
+    new Deno.Command(Deno.env.get('EDITOR'), {
+      args: [path]
+    }).spawn()
     return
   }
+  console.log('BUILDING: '+cnf.dir)
 
   getPaths(dir).forEach(path => {
     const doc = parse(path)
