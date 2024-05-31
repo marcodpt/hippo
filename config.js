@@ -9,11 +9,9 @@ export default ({
     authors: '',
     'og:image': 'image.jpg'
   },
-  data: ({date, tags, authors, ...meta}, {lang}) => ({
+  data: ({date, ...meta}, {lang}) => ({
     ...meta,
-    date: date ? new Date(date).toLocaleDateString() : null,
-    tags: (tags || '').split(',').map(k => k.trim()).filter(k => k),
-    authors: (authors || '').split(',').map(k => k.trim()).filter(k => k)
+    date: date ? new Date(date).toLocaleDateString() : null
   }),
   theme: {
     path: 'themes/blog.html',

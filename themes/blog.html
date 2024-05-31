@@ -53,7 +53,7 @@
     >
       <img src:="og:image"/>
     </div>
-    <section class="container mx-auto my-5" with:="data">
+    <section if:="parent" class="container mx-auto my-5" with:="data">
       <h1 class="title" text:="title"></h1>
       <time if:="date" text:="date"></time>
     </section>
@@ -64,27 +64,31 @@
       style="max-width:600px"
       each:="posts"
     >
-      <a href:="relative" class="text-reset text-decoration-none">
-        <img
-          with:="data"
-          if:="og:image"
-          src:="folder" src="image.jpg"
-          class="card-img-top"
-          alt:="title"
-        />
-        <div class="card-body">
-          <h5 class="card-title" text:="title"></h5>
-          <p class="card-text">
-            <template with:="meta">
-              <template if:="authors" text:="authors"></template>
-              <template if:="authors">
-                <template if:="date"> - </template>
-              </template>
+      <img
+        with:="data"
+        if:="og:image"
+        src:="folder" src="image.jpg"
+        class="card-img-top"
+        alt:="title"
+      />
+      <div class="card-body">
+        <h5 class="card-title">
+          <a
+            href:="relative"
+            class="text-reset text-decoration-none"
+            text:="title"
+          ></a>
+        </h5>
+        <p class="card-text">
+          <template with:="meta">
+            <template if:="authors" text:="authors"></template>
+            <template if:="authors">
+              <template if:="date"> - </template>
             </template>
-            <time with:="data" if:="date" text:="date"></time>
-          </p>
-        </div>
-      </a>
+          </template>
+          <time with:="data" if:="date" text:="date"></time>
+        </p>
+      </div>
     </div>
     <footer
       with:="theme"
