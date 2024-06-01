@@ -9,10 +9,14 @@ export default ({
     authors: '',
     'og:image': 'image.jpg'
   },
-  data: ({date, ...meta}, {lang}) => ({
-    ...meta,
-    date: date ? new Date(date).toLocaleDateString() : null
-  }),
+  render: Post => {
+    const D = Post.data
+    //Post.lang = Post.lang == 'null' ? 'en' : Post.lang
+    const {date} = Post.data
+    const img = Post.data['og:image']
+    D.date = D.date ? new Date(D.date).toLocaleDateString() : null
+    //D['og:image'] = Post.folder+D['og:image']
+  },
   theme: {
     path: 'themes/blog.html',
     email: 'user@mail.com',

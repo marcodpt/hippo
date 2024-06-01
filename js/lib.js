@@ -67,10 +67,9 @@ const sort = (Data, Rule) => {
 }
 
 const read = (doc, names, selector) => ({
-  path: doc.documentElement.getAttribute('data-path'),
   title: doc.title,
   lang: doc.documentElement.getAttribute('lang'),
-  main: (doc.body.querySelector(selector || 'main') || doc.body).innerHTML,
+  main: (doc.body.querySelector(selector || 'main') || doc.body),
   meta: (names || [])
     .map(k => doc.head.querySelector(`meta[name="${k}"]`))
     .filter(meta => meta)
@@ -86,20 +85,19 @@ const read = (doc, names, selector) => ({
 })
 
 const write = ({
-  path,
   title,
   lang,
   main,
   meta
 }) => `<!DOCTYPE html>
-<html${lang ? ` lang="${lang}"` : ''}${path ? ` data-path="${path}"` : ''}>
+<html${lang ? ` lang="${lang}"` : ''}>
   <head>
     ${Object.keys(meta).map(name =>
       `<meta name="${name}" content="${meta[name]}"/>`
     ).join('\n    ')}
     <title>${title}</title>
   </head>
-  <body>${(main || '').trim()}</body>
+  <body>${(main ? main.innerHTML : '').trim()}</body>
 </html>`
 
 const toPath = str => str.split('/').filter(p => p).join('/')

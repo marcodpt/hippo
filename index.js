@@ -151,7 +151,7 @@ import(Deno.cwd()+'/config.js').then(mod => {
       })
     })
 
-    Post.data = cnf.data(meta, extra)
+    Post.data = {...meta}
     Post.theme = cnf.theme
     Post.path = path.substr(dir.length)
     Post.relative = ''
@@ -224,9 +224,15 @@ import(Deno.cwd()+'/config.js').then(mod => {
     })
   })
 
+  if (typeof cnf.render == 'function') {
+    Posts.forEach(post => {
+      cnf.render(post)
+    })
+  }
+
   //Render
   Posts.forEach(post => {
-    const doc = parse(dir+post.path)
+    const doc = build(write(post))
     const D = getDir(post.path).split('/').filter(d => d)
     Posts.forEach(p => {
       p.relative = ''

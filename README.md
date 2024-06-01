@@ -2,10 +2,11 @@
 A SSG for Deno
 
 ## TODO
+ - build bug when edited need 2 tries to work
  - how to create custom tags?
  - rss/atom feed
  - do not require files named index.html, any .html file should work
- - theme variables should compile before rendering and isolated
+ - fallback to no theme
  - lazy compute data properties (problem with image path)
  - allow to use query selector on main while generating data (create description based on first p text content)
  - update meta properties and taxonomies
