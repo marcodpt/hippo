@@ -265,6 +265,9 @@ import(cwd+'/config.js').then(mod => {
     }
 
     const target = theme.body.cloneNode(true)
+    target.querySelectorAll('body > template[id*="-"]').forEach(customTag => {
+      target.removeChild(customTag)
+    })
     target.querySelector('main').innerHTML =
       (doc.body.querySelector('main') || doc.body).innerHTML
     doc.body.replaceWith(target)

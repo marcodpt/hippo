@@ -59,6 +59,8 @@
     </section>
     <main class="container mx-auto my-5">
     </main>
+    <post-list posts:="posts"></post-list>
+    <template id="post-list">
     <div
       class="container card mx-auto my-3 pt-3"
       style="max-width:600px"
@@ -91,6 +93,7 @@
         <p class="card-text" with:="data" text:="description"></p>
       </div>
     </div>
+    </template>
     <footer
       with:="global"
       class="mt-auto p-5 bg-light text-center"
