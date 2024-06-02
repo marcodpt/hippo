@@ -59,40 +59,45 @@
     </section>
     <main class="container mx-auto my-5">
     </main>
-    <post-list posts:="posts"></post-list>
-    <template id="post-list">
     <div
-      class="container card mx-auto my-3 pt-3"
+      if:="count"
+      class="container"
       style="max-width:600px"
-      each:="posts"
     >
-      <img
-        with:="data"
-        if:="og:image"
-        src:="og:image"
-        class="card-img-top"
-        alt:="title"
-      />
-      <div class="card-body">
-        <h5 class="card-title">
-          <a
-            href:="path"
-            class="text-reset text-decoration-none"
-            text:="title"
-          ></a>
-        </h5>
-        <p class="card-text">
-          <template with:="meta">
-            <template if:="authors" text:="authors"></template>
-            <template if:="authors">
-              <template if:="date"> - </template>
-            </template>
-          </template>
-          <time with:="data" if:="date" text:="date"></time>
-        </p>
-        <p class="card-text" with:="data" text:="description"></p>
-      </div>
+      <post-list posts:="posts"></post-list>
     </div>
+    <template id="post-list">
+      <div class="card mx-auto my-3" each:="posts">
+        <a href:="path">
+          <img
+            with:="data"
+            if:="og:image"
+            src:="og:image"
+            class="card-img-top"
+            alt:="title"
+            title:="title"
+          />
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">
+            <a
+              href:="path"
+              class="text-reset text-decoration-none"
+              text:="title"
+            ></a>
+          </h5>
+          <p class="card-text">
+            <template with:="meta">
+              <template if:="authors" text:="authors"></template>
+              <template if:="authors">
+                <template if:="date"> - </template>
+              </template>
+            </template>
+            <time with:="data" if:="date" text:="date"></time>
+          </p>
+          <p class="card-text" with:="data" text:="description"></p>
+        </div>
+      </div>
     </template>
     <footer
       with:="global"
