@@ -9,11 +9,11 @@ export default ({
     authors: '',
     'og:image': 'image.jpg'
   },
-  render: Post => {
-    const D = Post.data
-    const {date} = Post.data
-    const img = Post.data['og:image']
-    D.date = D.date ? new Date(D.date).toLocaleDateString() : null
+  render: ({data, main, lang}) => {
+    const {date} = data
+    const img = data['og:image']
+    data.date = date ? new Date(date).toLocaleDateString(lang) : null
+    data.description = main.querySelector('p')?.textContent
     //D['og:image'] = Post.folder+D['og:image']
   },
   theme: {
