@@ -12,12 +12,17 @@ export default ({
     index: '',
     size: ''
   },
-  render: ({data, main, lang, folder}) => {
+  render: Post => {
+    const {data, main, lang, folder, path, posts} = Post
     const {date} = data
     const img = data['og:image']
     data.date = date ? new Date(date).toLocaleDateString(lang) : date
     data.description = main.querySelector('p')?.textContent
     data['og:image'] = img ? folder+img : img
+    Post.display =
+      path == '/index.html' ? 'home' :
+      path == '/tags/index.html' ? 'tags' :
+      posts.length ? 'default' : 'none'
   },
   global: {
     email: 'user@mail.com',

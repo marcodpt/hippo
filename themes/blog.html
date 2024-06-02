@@ -59,9 +59,9 @@
     </section>
     <main class="container mx-auto my-5">
     </main>
-    <template if:="count">
+    <template switch:="display">
       <div
-        not:="level"
+        case="home"
         class="container mx-auto row"
       >
         <div
@@ -76,7 +76,20 @@
         </div>
       </div>
       <div
-        if:="level"
+        case="tags"
+        class="container mx-auto mb-5"
+      >
+        <a
+          each:="posts"
+          href:="path"
+          class="btn btn-info btn-lg m-3"
+        >
+          <template text:="title"></template>
+          <span class="badge bg-dark" text:="count"></span>
+        </a>
+      </div>
+      <div
+        case="default"
         class="container"
         style="max-width:600px"
       >
