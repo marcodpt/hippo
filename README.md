@@ -5,7 +5,6 @@ A SSG for Deno
  - how to create custom tags?
  - rss/atom feed
  - do not require files named index.html, any .html file should work
- - lazy compute data properties (problem with image path)
  - pass selector in command line
  - pass config file in command line
  - documentation
@@ -29,11 +28,8 @@ The associated lang attribute.
 ### path: String
 The absolute path in the site directory.
 
-### relative: String
-The relative path to the current post or empty string in case of been itself.
-
 ### folder: String
-The relative path to the directory of current post.
+The absolute path to the directory of current post.
 
 ### meta: Object
 An object with all the meta tags, where:

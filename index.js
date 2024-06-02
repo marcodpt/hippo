@@ -171,6 +171,7 @@ import(cwd+'/config.js').then(mod => {
     Post.data = {...meta}
     Post.global = cnf.global
     Post.path = path.substr(dir.length)
+    Post.folder = getDir(Post.path)
     Post.relative = ''
     Post.posts = []
     Post.count = 0
@@ -250,23 +251,6 @@ import(cwd+'/config.js').then(mod => {
   //Render
   Posts.forEach(post => {
     const doc = build(write(post))
-    const D = getDir(post.path).split('/').filter(d => d)
-    Posts.forEach(p => {
-      p.relative = ''
-      if (p.path == post.path) {
-        return
-      }
-      const R = getDir(p.path).split('/').filter(r => r)
-      for (var i = 0; i < R.length && i < D.length && R[i] == D[i]; i++) {}
-      for (var j = i; j < D.length; j++) {
-        p.relative += '../'
-      }
-      for (var j = i; j < R.length; j++) {
-        p.relative += R[j]+'/'
-      }
-      p.folder = p.relative
-      p.relative += 'index.html'
-    })
 
     var el = theme.head.querySelector('title')
     while (el?.previousElementSibling) {

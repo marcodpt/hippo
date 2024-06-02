@@ -10,12 +10,12 @@ export default ({
     authors: '',
     'og:image': 'image.jpg'
   },
-  render: ({data, main, lang}) => {
+  render: ({data, main, lang, folder}) => {
     const {date} = data
     const img = data['og:image']
-    data.date = date ? new Date(date).toLocaleDateString(lang) : null
+    data.date = date ? new Date(date).toLocaleDateString(lang) : date
     data.description = main.querySelector('p')?.textContent
-    //D['og:image'] = Post.folder+D['og:image']
+    data['og:image'] = img ? folder+img : img
   },
   global: {
     email: 'user@mail.com',

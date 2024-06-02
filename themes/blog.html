@@ -18,7 +18,7 @@
     ">
       <div class="container-fluid">
         <a class="navbar-brand"
-          href:="relative"
+          href:="path"
           text:="title"
         ></a>
         <button
@@ -37,7 +37,7 @@
             <li each:="posts" class="nav-item">
               <a
                 class="nav-link"
-                href:="relative"
+                href:="path"
                 text:="title"
               ></a>
             </li>
@@ -67,14 +67,14 @@
       <img
         with:="data"
         if:="og:image"
-        src:="folder" src="image.jpg"
+        src:="og:image"
         class="card-img-top"
         alt:="title"
       />
       <div class="card-body">
         <h5 class="card-title">
           <a
-            href:="relative"
+            href:="path"
             class="text-reset text-decoration-none"
             text:="title"
           ></a>
