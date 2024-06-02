@@ -5,7 +5,6 @@ A SSG for Deno
  - how to create custom tags?
  - rss/atom feed
  - do not require files named index.html, any .html file should work
- - fallback to no theme
  - lazy compute data properties (problem with image path)
  - pass selector in command line
  - pass config file in command line

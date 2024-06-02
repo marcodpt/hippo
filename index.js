@@ -9,7 +9,8 @@ import {
   build,
   parse,
   toPath,
-  getDir
+  getDir,
+  rawTheme
 } from './js/lib.js'
 import save from './js/save.js'
 import {parse as parseArgs} from "https://deno.land/std/flags/mod.ts"
@@ -22,11 +23,13 @@ if (cli.h === true || cli.help === true) {
   console.log('hippo [path]')
   Deno.exit(0)
 }
+const cwd = Deno.cwd()
 
 var scope
-import(Deno.cwd()+'/config.js').then(mod => {
+import(cwd+'/config.js').then(mod => {
   const cnf = mod.default
-  const theme = parse(cnf.theme.path)
+  const theme = existsSync(cwd+'/'+cnf.theme, {isFile: true}) ?
+    parse(cwd+'/'+cnf.theme) : rawTheme()
   const base = read(theme)
   const main = theme.body.querySelector('main')
   const dir = cnf.dir
@@ -166,7 +169,7 @@ import(Deno.cwd()+'/config.js').then(mod => {
     })
 
     Post.data = {...meta}
-    Post.theme = cnf.theme
+    Post.global = cnf.global
     Post.path = path.substr(dir.length)
     Post.relative = ''
     Post.posts = []

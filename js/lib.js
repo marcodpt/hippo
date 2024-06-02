@@ -108,6 +108,25 @@ const getDir = path => {
     path.substr(0, path.length - name.length + 1) : path
 }
 
+const rawTheme = () => build(`<!DOCTYPE html>
+<html>
+  <head>
+    <title>Post</title>
+  </head>
+  <body>
+    <nav if:="level">
+      <a each:="parents" href:="relative" text:="title"></a>
+    </nav>
+    <h1 text:="title"></h1>
+    <main></main>
+    <ul if:="count">
+      <li each:="posts">
+        <a href:="relative" text:="title"></a>
+      </li>
+    </ul>
+  </body>
+</html>`)
+
 export {
   build,
   parse,
@@ -118,5 +137,6 @@ export {
   read,
   write,
   toPath,
-  getDir
+  getDir,
+  rawTheme
 }

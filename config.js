@@ -1,4 +1,5 @@
 export default ({
+  theme: 'themes/blog.html',
   dir: 'docs',
   sort: ['-date'],
   selector: 'main',
@@ -16,8 +17,7 @@ export default ({
     data.description = main.querySelector('p')?.textContent
     //D['og:image'] = Post.folder+D['og:image']
   },
-  theme: {
-    path: 'themes/blog.html',
+  global: {
     email: 'user@mail.com',
     icons: [
       {
