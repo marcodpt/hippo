@@ -2,7 +2,6 @@
 A SSG for Deno
 
 ## TODO
- - build bug when edited need 2 tries to work
  - how to create custom tags?
  - rss/atom feed
  - do not require files named index.html, any .html file should work

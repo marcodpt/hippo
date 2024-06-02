@@ -23,6 +23,7 @@ if (cli.h === true || cli.help === true) {
   Deno.exit(0)
 }
 
+var scope
 import(Deno.cwd()+'/config.js').then(mod => {
   const cnf = mod.default
   const theme = parse(cnf.theme.path)
@@ -43,16 +44,16 @@ import(Deno.cwd()+'/config.js').then(mod => {
       }
     }
   }
+  scope = {cnf, theme, base, main, dir, names, createFile}
 
   //Create, edit, and save new file
   if (cli._[0]) {
     var path = ''
-    var directory = ''
     if (existsSync(cli._[0], {isFile: true})) {
       path = cli._[0]
       save(path, build(write(read(parse(path), names, cnf.selector))))
     } else {
-      directory = cli._[0]
+      scope.directory = cli._[0]
       path = '/tmp/hippo.html'
       save(path, build(write({
         ...base,
@@ -62,13 +63,26 @@ import(Deno.cwd()+'/config.js').then(mod => {
         }), {})
       })))
     }
-    new Deno.Command(Deno.env.get('EDITOR'), {
+    scope.path = path
+    return new Deno.Command(Deno.env.get('EDITOR'), {
       args: [path]
-    }).spawn()
-    if (directory) {
-      const data = read(parse(path), names, cnf.selector)
-      createFile(directory+'/'+slugify(data.title), data)
-    }
+    }).spawn().status
+  }
+}).then(() => {
+  const {
+    cnf,
+    theme,
+    base,
+    main,
+    dir,
+    names,
+    createFile,
+    path,
+    directory
+  } = scope
+  if (directory) {
+    const data = read(parse(path), names, cnf.selector)
+    createFile(directory+'/'+slugify(data.title), data)
   }
   console.log('BUILDING: '+cnf.dir)
 
