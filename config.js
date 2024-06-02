@@ -1,14 +1,16 @@
 export default ({
   theme: 'themes/blog.html',
   dir: 'docs',
-  sort: ['-date'],
+  sort: ['index', '-date', '-size'],
   selector: 'main',
   taxonomies: ['tags', 'authors'],
   default: {
     date: new Date().toISOString().substr(0, 10),
     tags: '',
     authors: '',
-    'og:image': 'image.jpg'
+    'og:image': 'image.jpg',
+    index: '',
+    size: ''
   },
   render: ({data, main, lang, folder}) => {
     const {date} = data
