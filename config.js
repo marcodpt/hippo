@@ -11,7 +11,6 @@ export default ({
   },
   render: Post => {
     const D = Post.data
-    //Post.lang = Post.lang == 'null' ? 'en' : Post.lang
     const {date} = Post.data
     const img = Post.data['og:image']
     D.date = D.date ? new Date(D.date).toLocaleDateString() : null
