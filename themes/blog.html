@@ -89,6 +89,13 @@
         </a>
       </div>
       <div
+        case="authors"
+        class="container"
+        style="max-width:800px"
+      >
+        <author-box each:="posts" bind:=""></author-box>
+      </div>
+      <div
         case="default"
         class="container"
         style="max-width:600px"
@@ -126,6 +133,38 @@
             <time with:="data" if:="date" text:="date"></time>
           </p>
           <p class="card-text" with:="data" text:="description"></p>
+        </div>
+      </div>
+    </template>
+    <template id="author-box">
+      <div class="card my-5">
+        <div class="row g-0">
+          <div class="col-md-4 d-flex align-items-center">
+            <a
+              class="m-auto my-3 d-block"
+              title:="title"
+              href:="path"
+              with:="data"
+            >
+              <img
+                src:="og:image"
+                class="img-fluid rounded-circle"
+                alt:="title"
+              />
+            </a>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">
+                <a
+                  class="text-decoration-none text-reset"
+                  href:="path"
+                  text:="title"
+                ></a>
+              </h5>
+              <p class="card-text" text:="content"></p>
+            </div>
+          </div>
         </div>
       </div>
     </template>

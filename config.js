@@ -16,12 +16,19 @@ export default ({
     const {data, main, lang, folder, path, posts} = Post
     const {date} = data
     const img = data['og:image']
+    const isAuthor = path.startsWith('/authors/') &&
+      path != '/authors/index.html'
+    if (isAuthor) {
+      Post.content = main.textContent
+    }
     data.date = date ? new Date(date).toLocaleDateString(lang) : date
     data.description = main.querySelector('p')?.textContent
     data['og:image'] = img ? folder+img : img
+    Post.info = isAuthor ? 'author' : 'default'
     Post.display =
       path == '/index.html' ? 'home' :
       path == '/tags/index.html' ? 'tags' :
+      path == '/authors/index.html' ? 'authors' :
       posts.length ? 'default' : 'none'
   },
   global: {
