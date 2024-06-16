@@ -45,19 +45,28 @@
         </div>
       </div>
     </nav>
-    <div
-      with:="data"
-      if:="og:image" 
-      class="float-end m-5 display-none-sm"
-      style="max-width:700px"
-    >
-      <img src:="og:image"/>
-    </div>
-    <section if:="parent" class="container mx-auto my-5" with:="data">
-      <h1 class="title" text:="title"></h1>
-      <time if:="date" text:="date"></time>
-    </section>
-    <main class="container mx-auto my-5">
+    <template switch:="info">
+      <author-box case="author" bind:=""></author-box>
+      <div
+        case="default"
+        with:="data"
+        if:="og:image" 
+        class="float-end m-5 display-none-sm"
+        style="max-width:700px"
+      >
+        <img src:="og:image"/>
+      </div>
+      <section
+        case="default"
+        if:="parent"
+        class="container mx-auto my-5"
+        with:="data"
+      >
+        <h1 class="title" text:="title"></h1>
+        <time if:="date" text:="date"></time>
+      </section>
+    </template>
+    <main class="container mx-auto my-5" class:="css">
     </main>
     <template switch:="display">
       <div
@@ -88,13 +97,9 @@
           <span class="badge bg-dark" text:="count"></span>
         </a>
       </div>
-      <div
-        case="authors"
-        class="container"
-        style="max-width:800px"
-      >
+      <template case="authors">
         <author-box each:="posts" bind:=""></author-box>
-      </div>
+      </template>
       <div
         case="default"
         class="container"
@@ -137,32 +142,34 @@
       </div>
     </template>
     <template id="author-box">
-      <div class="card my-5">
-        <div class="row g-0">
-          <div class="col-md-4 d-flex align-items-center">
-            <a
-              class="m-auto my-3 d-block"
-              title:="title"
-              href:="path"
-              with:="data"
-            >
-              <img
-                src:="og:image"
-                class="img-fluid rounded-circle"
-                alt:="title"
-              />
-            </a>
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">
-                <a
-                  class="text-decoration-none text-reset"
-                  href:="path"
-                  text:="title"
-                ></a>
-              </h5>
-              <p class="card-text" text:="content"></p>
+      <div class="container my-3" style="max-width:800px">
+        <div class="card">
+          <div class="row g-0">
+            <div class="col-md-4 d-flex align-items-center">
+              <a
+                class="m-auto my-3 d-block"
+                title:="title"
+                href:="path"
+                with:="data"
+              >
+                <img
+                  src:="og:image"
+                  class="img-fluid rounded-circle"
+                  alt:="title"
+                />
+              </a>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a
+                    class="text-decoration-none text-reset"
+                    href:="path"
+                    text:="title"
+                  ></a>
+                </h5>
+                <p class="card-text" text:="content"></p>
+              </div>
             </div>
           </div>
         </div>

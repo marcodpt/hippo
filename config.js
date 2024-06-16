@@ -21,6 +21,7 @@ export default ({
     if (isAuthor) {
       Post.content = main.textContent
     }
+    Post.css = isAuthor ? ' d-none' : ''
     data.date = date ? new Date(date).toLocaleDateString(lang) : date
     data.description = main.querySelector('p')?.textContent
     data['og:image'] = img ? folder+img : img
