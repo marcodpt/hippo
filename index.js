@@ -161,9 +161,12 @@ import(cwd+'/config.js').then(mod => {
     const Post = read(parse(path), names)
     const {meta, ...extra} = Post
 
+    Post.taxonomies = {}
     X.forEach(taxonomy => {
+      Post.taxonomies[taxonomy] = []
       const slug = slugify(taxonomy)
       buildTaxonomy(meta[taxonomy]).forEach(item => {
+        Post.taxonomies[taxonomy].push(item)
         Taxonomies[slug][slugify(item)].push(Post)
       })
     })
@@ -206,6 +209,12 @@ import(cwd+'/config.js').then(mod => {
     if (parent) {
       post.parent.posts.push(post)
     }
+    const T = post.taxonomies
+    Object.keys(T).forEach(k => {
+      T[k] = T[k].map(item => Posts.filter(post =>
+        post.path == `/${slugify(k)}/${slugify(item)}/index.html`
+      )).reduce((T, Posts) => T.concat(Posts), [])
+    })
   })
   Posts.forEach(post => {
     var p = post.parent

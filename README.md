@@ -2,16 +2,16 @@
 A SSG for Deno
 
 ## TODO
- - taxonomies access and links to authors and tags
  - all defaults should came from config.global never from theme and set base tag
  - blog theme
 
  - minimum variables and review default theme
+ - documentation/book theme
+
  - pass selector in command line
  - pass config file in command line
  - rss/atom feed
  - do not require files named index.html, any .html file should work
- - documentation/book theme
 
 ## run
 ```
