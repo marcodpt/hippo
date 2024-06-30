@@ -66,10 +66,10 @@ const sort = (Data, Rule) => {
   }, 0))
 }
 
-const read = (doc, names, selector) => ({
+const read = (doc, names) => ({
   title: doc.title,
   lang: doc.documentElement.getAttribute('lang'),
-  main: (doc.body.querySelector(selector || 'main') || doc.body),
+  main: doc.body.querySelector('main') || doc.body,
   meta: (names || [])
     .map(k => doc.head.querySelector(`meta[name="${k}"]`))
     .filter(meta => meta)
@@ -108,6 +108,12 @@ const getDir = path => {
     path.substr(0, path.length - name.length + 1) : path
 }
 
+const dir = path => {
+  const P = path.split('/').filter(p => p)
+  P.pop()
+  return P.join('/')
+}
+
 const rawTheme = () => build(`<!DOCTYPE html>
 <html>
   <head>
@@ -138,5 +144,6 @@ export {
   write,
   toPath,
   getDir,
+  dir,
   rawTheme
 }

@@ -10,6 +10,7 @@ import {
   parse,
   toPath,
   getDir,
+  dir,
   rawTheme
 } from './js/lib.js'
 import save from './js/save.js'
@@ -18,20 +19,27 @@ import {existsSync} from "https://deno.land/std@0.224.0/fs/exists.ts";
 
 const cli = parseArgs(Deno.args)
 
-if (cli.h === true || cli.help === true) {
+if (cli.h === true || cli.help === true || !cli._[0] || !existsSync(cli._[0], {
+  isFile: true
+})) {
   console.log('Hippo SSG')
-  console.log('hippo [path]')
+  console.log('hippo [config] [path]')
   Deno.exit(0)
 }
-const cwd = Deno.cwd()
 
 var scope
-import(cwd+'/config.js').then(mod => {
+if (['/', '.'].indexOf(cli._[0].substr(0, 1)) < 0) {
+  cli._[0] = './'+cli._[0]
+}
+const cwd = dir(cli._[0])
+import(cli._[0]).then(mod => {
   const cnf = mod.default
   const theme = existsSync(cwd+'/'+cnf.theme, {isFile: true}) ?
     parse(cwd+'/'+cnf.theme) : rawTheme()
-  const base = read(theme)
-  const main = theme.body.querySelector('main')
+  const base = {
+    title: cnf.title,
+    lang: cnf.lang
+  }
   const dir = cnf.dir
   const names = Object.keys(cnf.default)
 
@@ -47,16 +55,16 @@ import(cwd+'/config.js').then(mod => {
       }
     }
   }
-  scope = {cnf, theme, base, main, dir, names, createFile}
+  scope = {cnf, theme, base, dir, names, createFile}
 
   //Create, edit, and save new file
-  if (cli._[0]) {
+  if (cli._[1]) {
     var path = ''
-    if (existsSync(cli._[0], {isFile: true})) {
-      path = cli._[0]
-      save(path, build(write(read(parse(path), names, cnf.selector))))
+    if (existsSync(cli._[1], {isFile: true})) {
+      path = cli._[1]
+      save(path, build(write(read(parse(path), names))))
     } else {
-      scope.directory = cli._[0]
+      scope.directory = cli._[1]
       path = '/tmp/hippo.html'
       save(path, build(write({
         ...base,
@@ -76,7 +84,6 @@ import(cwd+'/config.js').then(mod => {
     cnf,
     theme,
     base,
-    main,
     dir,
     names,
     createFile,
@@ -84,7 +91,7 @@ import(cwd+'/config.js').then(mod => {
     directory
   } = scope
   if (directory) {
-    const data = read(parse(path), names, cnf.selector)
+    const data = read(parse(path), names)
     createFile(directory+'/'+slugify(data.title), data)
   }
   console.log('BUILDING: '+cnf.dir)
@@ -93,7 +100,7 @@ import(cwd+'/config.js').then(mod => {
     const doc = parse(path)
 
     if (!doc.documentElement.getAttribute('lang')) {
-      doc.documentElement.setAttribute('lang', base.lang)
+      doc.documentElement.setAttribute('lang', cnf.lang)
     }
 
     doc.head.childNodes.forEach(child => {
@@ -120,7 +127,8 @@ import(cwd+'/config.js').then(mod => {
         }
       })
     } else {
-      const m = main.cloneNode(false)
+      const m = theme.querySelector('main')?.cloneNode(false) ||
+        doc.createElement('main')
       m.innerHTML = doc.body.innerHTML
       doc.body.innerHTML = ''
       doc.body.appendChild(m)

@@ -1,8 +1,9 @@
 export default ({
   theme: 'themes/blog.html',
+  lang: '',
+  title: 'Blog Post',
   dir: 'docs',
   sort: ['index', '-date', '-size'],
-  selector: 'main',
   taxonomies: ['tags', 'authors'],
   default: {
     date: new Date().toISOString().substr(0, 10),
