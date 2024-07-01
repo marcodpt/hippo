@@ -2,7 +2,7 @@ export default ({
   theme: 'themes/blog.html',
   lang: '',
   title: 'Blog Post',
-  base: '/hippo',
+  base: 'https://marcodpt.github.io/hippo/',
   dir: 'docs',
   sort: ['index', '-date', '-size'],
   taxonomies: ['tags', 'authors'],
