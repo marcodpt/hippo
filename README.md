@@ -2,8 +2,6 @@
 A SSG for Deno
 
 ## TODO
- - blog theme
-
  - rss/atom feed
  - minimum variables and review default theme
  - documentation/book theme
