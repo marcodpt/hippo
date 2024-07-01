@@ -18,8 +18,8 @@ export default ({
     const {data, main, lang, folder, path, posts} = Post
     const {date} = data
     const img = data['og:image']
-    const isAuthor = path.startsWith('/authors/') &&
-      path != '/authors/index.html'
+    const isAuthor = path.startsWith('authors/') &&
+      path != 'authors/index.html'
     if (isAuthor) {
       Post.content = main.textContent
     }
@@ -29,9 +29,9 @@ export default ({
     data['og:image'] = img ? folder+img : img
     Post.info = isAuthor ? 'author' : 'default'
     Post.display =
-      path == '/index.html' ? 'home' :
-      path == '/tags/index.html' ? 'tags' :
-      path == '/authors/index.html' ? 'authors' :
+      path == 'index.html' ? 'home' :
+      path == 'tags/index.html' ? 'tags' :
+      path == 'authors/index.html' ? 'authors' :
       posts.length ? 'default' : 'none'
   },
   global: {
