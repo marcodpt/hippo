@@ -87,6 +87,7 @@ const read = (doc, names) => ({
 const write = ({
   title,
   lang,
+  base,
   main,
   meta
 }) => `<!DOCTYPE html>
@@ -95,6 +96,7 @@ const write = ({
     ${Object.keys(meta).map(name =>
       `<meta name="${name}" content="${meta[name]}"/>`
     ).join('\n    ')}
+    ${base ? `<base href="${base}">` : ''}
     <title>${title}</title>
   </head>
   <body>${(main ? main.innerHTML : '').trim()}</body>
@@ -103,9 +105,9 @@ const write = ({
 const toPath = str => str.split('/').filter(p => p).join('/')
 
 const getDir = path => {
-  const name = '/index.html'
+  const name = 'index.html'
   return path.substr(path.length - name.length) == name ?
-    path.substr(0, path.length - name.length + 1) : path
+    path.substr(0, path.length - name.length) : path
 }
 
 const dir = path => {

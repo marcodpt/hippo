@@ -38,7 +38,8 @@ import(cli._[0]).then(mod => {
     parse(cwd+'/'+cnf.theme) : rawTheme()
   const base = {
     title: cnf.title,
-    lang: cnf.lang
+    lang: cnf.lang,
+    base: cnf.base
   }
   const dir = cnf.dir
   const names = Object.keys(cnf.default)
@@ -181,7 +182,7 @@ import(cli._[0]).then(mod => {
 
     Post.data = {...meta}
     Post.global = cnf.global
-    Post.path = path.substr(dir.length)
+    Post.path = path.substr(dir.length+1)
     Post.folder = getDir(Post.path)
     Post.relative = ''
     Post.posts = []
@@ -220,7 +221,7 @@ import(cli._[0]).then(mod => {
     const T = post.taxonomies
     Object.keys(T).forEach(k => {
       T[k] = T[k].map(item => Posts.filter(post =>
-        post.path == `/${slugify(k)}/${slugify(item)}/index.html`
+        post.path == `${slugify(k)}/${slugify(item)}/index.html`
       )).reduce((T, Posts) => T.concat(Posts), [])
     })
   })
@@ -237,7 +238,7 @@ import(cli._[0]).then(mod => {
     Object.keys(Taxonomies).forEach(slug => {
       const T = Taxonomies[slug]
       Object.keys(T).forEach(sluged => {
-        if (post.path === `/${slug}/${sluged}/index.html`) {
+        if (post.path === `${slug}/${sluged}/index.html`) {
           post.posts = post.posts.concat(T[sluged])
         }
       })
@@ -267,7 +268,10 @@ import(cli._[0]).then(mod => {
 
   //Render
   Posts.forEach(post => {
-    const doc = build(write(post))
+    const doc = build(write({
+      base: cnf.base,
+      ...post
+    }))
 
     var el = theme.head.querySelector('title')
     while (el?.previousElementSibling) {
@@ -290,6 +294,6 @@ import(cli._[0]).then(mod => {
     doc.body.replaceWith(target)
     compile(target, null, theme)(post)
 
-    save(dir+post.path, doc)
+    save(dir+'/'+post.path, doc)
   })
 })
