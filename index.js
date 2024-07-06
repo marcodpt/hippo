@@ -187,10 +187,6 @@ import(cli._[0]).then(mod => {
     Post.relative = ''
     Post.posts = []
     Post.count = 0
-    Post.first = null
-    Post.previous = null
-    Post.next = null
-    Post.last = null
     Post.children = {}
     Post.parents = []
     Post.level = 0
@@ -250,14 +246,6 @@ import(cli._[0]).then(mod => {
     }), {})
     const n = post.posts.length
     post.count = n
-    const first = n ? post.posts[0] : null
-    const last = n ? post.posts[n - 1] : null
-    post.posts.forEach((p, i) => {
-      p.first = first
-      p.last = last
-      p.previous = i ? post.posts[i - 1] : null
-      p.next = i + 1 < n ? post.posts[i + 1] : null
-    })
   })
 
   if (typeof cnf.render == 'function') {

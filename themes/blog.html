@@ -49,12 +49,11 @@
       <author-box case="author" bind:=""></author-box>
       <div
         case="default"
-        with:="data"
-        if:="og:image" 
+        if:="image" 
         class="float-end m-5 display-none-sm"
         style="max-width:700px"
       >
-        <img src:="og:image"/>
+        <img src:="image"/>
       </div>
       <section
         case="default"
@@ -74,7 +73,7 @@
       >
         <div
           each:="posts"
-          with:="data"
+          with:="meta"
           if:="size"
           class="col-md-"
           class:="size"
@@ -111,9 +110,8 @@
       <div class="card my-3" each:="posts">
         <a href:="path">
           <img
-            with:="data"
-            if:="og:image"
-            src:="og:image"
+            if:="image"
+            src:="image"
             class="card-img-top"
             alt:="title"
             title:="title"
@@ -130,7 +128,7 @@
           <p class="card-text">
             <post-data bind:=""></post-data>
           </p>
-          <p class="card-text" with:="data" text:="description"></p>
+          <p class="card-text" text:="description"></p>
         </div>
       </div>
     </template>
@@ -143,10 +141,9 @@
                 class="m-auto my-3 d-block"
                 title:="title"
                 href:="path"
-                with:="data"
               >
                 <img
-                  src:="og:image"
+                  src:="image"
                   class="img-fluid rounded-circle"
                   alt:="title"
                 />
@@ -178,7 +175,7 @@
           ></a>
         </template>
       </template>
-      <time with:="data" if:="date" text:="date"></time>
+      <time if:="date" text:="date"></time>
       <template with:="taxonomies">
         <template with:="tags">
           <br if:="0"/>

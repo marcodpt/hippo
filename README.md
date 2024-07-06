@@ -2,14 +2,14 @@
 A SSG for Deno
 
 ## TODO
- - rss/atom feed
  - minimum variables and review default theme
- - documentation/book theme
  - do not require files named index.html, any .html file should work
+ - rss/atom feed
+ - documentation/book theme
 
 ## run
 ```
-deno run --allow-read --allow-write --allow-run --allow-env index.js
+deno run --allow-read --allow-write --allow-run --allow-env index.js config.js
 ```
 
 ## post: Object
@@ -32,27 +32,12 @@ An object with all the meta tags, where:
  - the keys are `name` attribute.
  - the values are the `content` attribute parsed but not formatted.
 
-### data: Object
-An object with the meta tags transformed with `data` function defined by user.
-
 ### posts: Array
 Array of children with all itens been an object `post` with all this variables.
 In case of taxonomies items, all associated posts will be included.
 
 ### count: Integer
 The number of `posts`.
-
-### first: Object
-The first `post` in parent array of `posts`.
-
-### previous: Object
-The previous `post` in parent array of `posts`.
-
-### next: Object
-The next `post` in parent array of `posts`.
-
-### last: Object
-The last `post` in parent array of `posts`.
 
 ### children: Object
 An object with the same content as `posts` array but with keys been the

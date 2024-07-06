@@ -1,6 +1,5 @@
 export default ({
   theme: 'themes/blog.html',
-  lang: '',
   title: 'Blog Post',
   base: 'https://marcodpt.github.io/hippo/',
   dir: 'docs',
@@ -15,18 +14,18 @@ export default ({
     size: ''
   },
   render: Post => {
-    const {data, main, lang, folder, path, posts} = Post
-    const {date} = data
-    const img = data['og:image']
+    const {meta, main, lang, folder, path, posts} = Post
+    const {date} = meta
+    const img = meta['og:image']
     const isAuthor = path.startsWith('authors/') &&
       path != 'authors/index.html'
     if (isAuthor) {
       Post.content = main.textContent
     }
     Post.css = isAuthor ? ' d-none' : ''
-    data.date = date ? new Date(date).toLocaleDateString(lang) : date
-    data.description = main.querySelector('p')?.textContent
-    data['og:image'] = img ? folder+img : img
+    Post.date = date ? new Date(date).toLocaleDateString(lang) : date
+    Post.description = main.querySelector('p')?.textContent
+    Post.image = img ? folder+img : img
     Post.info = isAuthor ? 'author' : 'default'
     Post.display =
       path == 'index.html' ? 'home' :
