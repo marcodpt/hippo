@@ -38,7 +38,7 @@ import(cli._[0]).then(mod => {
   const base = {
     title: cnf.title,
     lang: cnf.lang,
-    base: cnf.base
+    base: cnf.url
   }
   const dir = cnf.dir
   const names = Object.keys(cnf.default)
@@ -244,7 +244,7 @@ import(cli._[0]).then(mod => {
   //Render
   Posts.forEach(post => {
     const doc = build(write({
-      base: cnf.base,
+      base: cnf.url,
       ...post
     }))
 

@@ -4,7 +4,7 @@ export default ({
   kind,  
   template: Deno.readTextFileSync('kinds/blog/templates/bootstrap.html'),
   title: 'Blog',
-  base: 'https://marcodpt.github.io/hippo/',
+  url: 'https://marcodpt.github.io/hippo/',
   dir: 'docs',
   default: {
     date: new Date().toISOString().substr(0, 10),
