@@ -14,7 +14,7 @@ export default ({
     Post.css = isAuthor ? ' d-none' : ''
     Post.date = date ? new Date(date).toLocaleDateString(lang) : date
     Post.description = main.querySelector('p')?.textContent
-    Post.image = img ? folder+img : img
+    Post.image = img ? `${folder}/${img}` : img
     Post.info = isAuthor ? 'author' : 'default'
     Post.display =
       path == 'index.html' ? 'home' :

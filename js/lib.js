@@ -104,13 +104,7 @@ const write = ({
 
 const toPath = str => str.split('/').filter(p => p).join('/')
 
-const getDir = path => {
-  const name = 'index.html'
-  return path.substr(path.length - name.length) == name ?
-    path.substr(0, path.length - name.length) : path
-}
-
-const dir = path => {
+const folder = path => {
   const P = path.split('/').filter(p => p)
   P.pop()
   return P.join('/')
@@ -145,7 +139,6 @@ export {
   read,
   write,
   toPath,
-  getDir,
-  dir,
+  folder,
   rawTheme
 }

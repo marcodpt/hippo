@@ -9,8 +9,7 @@ import {
   build,
   parse,
   toPath,
-  getDir,
-  dir,
+  folder,
   rawTheme
 } from './js/lib.js'
 import save from './js/save.js'
@@ -31,7 +30,7 @@ var scope
 if (['/', '.'].indexOf(cli._[0].substr(0, 1)) < 0) {
   cli._[0] = './'+cli._[0]
 }
-const cwd = dir(cli._[0])
+const cwd = folder(cli._[0])
 import(cli._[0]).then(mod => {
   const cnf = mod.default
   const template = build(cnf.template || rawTheme)
@@ -182,7 +181,7 @@ import(cli._[0]).then(mod => {
     Post.data = {...meta}
     Post.global = cnf.global
     Post.path = path.substr(dir.length+1)
-    Post.folder = getDir(Post.path)
+    Post.folder = folder(Post.path)
     Post.posts = []
     Post.parents = []
     Post.root = null
@@ -195,12 +194,12 @@ import(cli._[0]).then(mod => {
   //Set posts and parent
   Posts.forEach(post => {
     var parent = null
-    const d = getDir(post.path)
+    const d = folder(post.path)
     Posts.forEach(p => {
-      const e = getDir(p.path)
+      const e = folder(p.path)
       if (
         (parent == null || p.path.length > parent.path.length) &&
-        e.length < d.length && getDir(d).indexOf(e) === 0
+        e.length < d.length && d.indexOf(e) === 0
       ) {
         parent = p
       }
