@@ -9,7 +9,7 @@ A SSG for Deno
 
 ## run
 ```
-deno run --allow-read --allow-write --allow-run --allow-env index.js config.js
+deno run --allow-read --allow-write --allow-run --allow-env index.js build/config.js
 ```
 
 ## post: Object

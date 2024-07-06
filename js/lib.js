@@ -116,7 +116,7 @@ const dir = path => {
   return P.join('/')
 }
 
-const rawTheme = () => build(`<!DOCTYPE html>
+const rawTheme = `<!DOCTYPE html>
 <html>
   <head>
     <title>Post</title>
@@ -133,7 +133,7 @@ const rawTheme = () => build(`<!DOCTYPE html>
       </li>
     </ul>
   </body>
-</html>`)
+</html>`
 
 export {
   build,

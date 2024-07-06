@@ -34,8 +34,7 @@ if (['/', '.'].indexOf(cli._[0].substr(0, 1)) < 0) {
 const cwd = dir(cli._[0])
 import(cli._[0]).then(mod => {
   const cnf = mod.default
-  const theme = existsSync(cwd+'/'+cnf.theme, {isFile: true}) ?
-    parse(cwd+'/'+cnf.theme) : rawTheme()
+  const template = build(cnf.template || rawTheme)
   const base = {
     title: cnf.title,
     lang: cnf.lang,
@@ -56,7 +55,7 @@ import(cli._[0]).then(mod => {
       }
     }
   }
-  scope = {cnf, theme, base, dir, names, createFile}
+  scope = {cnf, template, base, dir, names, createFile}
 
   //Create, edit, and save new file
   if (cli._[1]) {
@@ -83,7 +82,7 @@ import(cli._[0]).then(mod => {
 }).then(() => {
   const {
     cnf,
-    theme,
+    template,
     base,
     dir,
     names,
@@ -128,7 +127,7 @@ import(cli._[0]).then(mod => {
         }
       })
     } else {
-      const m = theme.querySelector('main')?.cloneNode(false) ||
+      const m = template.querySelector('main')?.cloneNode(false) ||
         doc.createElement('main')
       m.innerHTML = doc.body.innerHTML
       doc.body.innerHTML = ''
@@ -142,7 +141,7 @@ import(cli._[0]).then(mod => {
   const Taxonomies = {}
   const buildTaxonomy = meta => (meta || '').split(',')
     .map(k => k.trim()).filter(k => k)
-  const X = cnf.taxonomies || []
+  const X = cnf.kind?.taxonomies || []
 
   getPaths(dir).map(path => {
     const Post = read(parse(path), names)
@@ -191,7 +190,7 @@ import(cli._[0]).then(mod => {
 
     return Post
   })
-  sort(Posts, cnf.sort)
+  sort(Posts, cnf.sort || cnf.kind?.sort || [])
 
   //Set posts and parent
   Posts.forEach(post => {
@@ -236,9 +235,9 @@ import(cli._[0]).then(mod => {
     })
   })
 
-  if (typeof cnf.render == 'function') {
+  if (typeof cnf.kind?.render == 'function') {
     Posts.forEach(post => {
-      cnf.render(post)
+      cnf.kind?.render(post)
     })
   }
 
@@ -249,26 +248,26 @@ import(cli._[0]).then(mod => {
       ...post
     }))
 
-    var el = theme.head.querySelector('title')
+    var el = template.head.querySelector('title')
     while (el?.previousElementSibling) {
       el = el.previousElementSibling
       doc.head.prepend(el.cloneNode())
     }
 
-    el = theme.head.querySelector('title')
+    el = template.head.querySelector('title')
     while (el?.nextElementSibling) {
       el = el.nextElementSibling
       doc.head.append(el.cloneNode())
     }
 
-    const target = theme.body.cloneNode(true)
+    const target = template.body.cloneNode(true)
     target.querySelectorAll('body > template[id*="-"]').forEach(customTag => {
       target.removeChild(customTag)
     })
     target.querySelector('main').innerHTML =
       (doc.body.querySelector('main') || doc.body).innerHTML
     doc.body.replaceWith(target)
-    compile(target, null, theme)(post)
+    compile(target, null, template)(post)
 
     save(dir+'/'+post.path, doc)
   })
