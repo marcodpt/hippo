@@ -184,9 +184,7 @@ import(cli._[0]).then(mod => {
     Post.global = cnf.global
     Post.path = path.substr(dir.length+1)
     Post.folder = getDir(Post.path)
-    Post.relative = ''
     Post.posts = []
-    Post.children = {}
     Post.parents = []
     Post.root = null
     Post.parent = null
@@ -236,11 +234,6 @@ import(cli._[0]).then(mod => {
         }
       })
     })
-
-    post.children = post.posts.reduce((C, p) => ({
-      ...C,
-      [slugify(p.title)]: p
-    }), {})
   })
 
   if (typeof cnf.render == 'function') {

@@ -21,6 +21,9 @@ The title as was written.
 ### lang: String
 The associated lang attribute.
 
+### main: Dom element
+The content of the post.
+
 ### path: String
 The absolute path in the site directory.
 
@@ -36,10 +39,6 @@ An object with all the meta tags, where:
 Array of children with all itens been an object `post` with all this variables.
 In case of taxonomies items, all associated posts will be included.
 
-### children: Object
-An object with the same content as `posts` array but with keys been the
-`slug` of each post to access an especific content.
-
 ### parents: Array
 Array of parents with all itens been an object `post` with all this variables.
 
@@ -47,4 +46,4 @@ Array of parents with all itens been an object `post` with all this variables.
 The first `post` in array of `parents` or the current `post` if it is the root.
 
 ### parent: Object
-The last `post` in array of `parents`.
+The last `post` in array of `parents` or null if the current `post` is the root.
