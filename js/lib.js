@@ -35,22 +35,6 @@ const slugify = str => {
   return str
 }
 
-const getPaths = path => {
-  const Files = []
-  const ext = 'index.html'
-  const hasExt = name => name.substr(name.length - ext.length) == ext
-  for (const entry of Deno.readDirSync(path)) {
-    if (entry.isDirectory) {
-      getPaths(`${path}/${entry.name}`).filter(hasExt).forEach(file => {
-        Files.push(file)
-      })
-    } else if (hasExt(entry.name)) {
-      Files.push(`${path}/${entry.name}`)
-    }
-  }
-  return Files
-}
-
 const sort = (Data, Rule) => {
   if (!(Rule instanceof Array)) {
     return
@@ -102,13 +86,38 @@ const write = ({
   <body>${(main ? main.innerHTML : '').trim()}</body>
 </html>`
 
-const toPath = str => str.split('/').filter(p => p).join('/')
-
 const folder = path => {
-  const P = path.split('/').filter(p => p)
+  const P = path.split('/').filter(p => p && p != '.')
   P.pop()
   return P.join('/')
 }
+
+const fname = path => path.split('/').pop()
+const fbase = path => fname(path) == 'index.html' ? folder(path) : path
+
+const ext = fname => {
+  const E = fname.split('.')
+  E.shift()
+  return E.join('.')
+}
+
+const getPosts = path => {
+  const Files = []
+  const hasExt = name => ext(name) == 'html'
+  for (const entry of Deno.readDirSync(path)) {
+    if (entry.isDirectory) {
+      getPosts(`${path}/${entry.name}`).filter(hasExt).forEach(file => {
+        Files.push(file)
+      })
+    } else if (hasExt(entry.name)) {
+      Files.push(`${path}/${entry.name}`)
+    }
+  }
+  return Files
+}
+
+const buildTaxonomy = meta => (meta || '').split(',')
+  .map(k => k.trim()).filter(k => k)
 
 const rawTheme = `<!DOCTYPE html>
 <html>
@@ -134,11 +143,12 @@ export {
   parse,
   tagName,
   slugify,
-  getPaths,
+  getPosts,
   sort,
   read,
   write,
-  toPath,
   folder,
+  fbase,
+  buildTaxonomy,
   rawTheme
 }

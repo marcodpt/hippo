@@ -2,14 +2,15 @@ import compile from "https://cdn.jsdelivr.net/gh/marcodpt/tint@2.5.0/template.js
 import {
   tagName,
   slugify,
-  getPaths,
+  getPosts,
   sort,
   read,
   write,
   build,
   parse,
-  toPath,
+  fbase,
   folder,
+  buildTaxonomy,
   rawTheme
 } from './js/lib.js'
 import save from './js/save.js'
@@ -27,11 +28,7 @@ if (cli.h === true || cli.help === true || !cli._[0] || !existsSync(cli._[0], {
 }
 
 var scope
-if (['/', '.'].indexOf(cli._[0].substr(0, 1)) < 0) {
-  cli._[0] = './'+cli._[0]
-}
-const cwd = folder(cli._[0])
-import(cli._[0]).then(mod => {
+import('./'+cli._[0]).then(mod => {
   const cnf = mod.default
   const template = build(cnf.template || rawTheme)
   const base = {
@@ -95,7 +92,7 @@ import(cli._[0]).then(mod => {
   }
   console.log('BUILDING: '+cnf.dir)
 
-  getPaths(dir).forEach(path => {
+  getPosts(dir).forEach(path => {
     const doc = parse(path)
 
     if (!doc.documentElement.getAttribute('lang')) {
@@ -138,11 +135,9 @@ import(cli._[0]).then(mod => {
 
   //Cleanup, fix and build taxonomies
   const Taxonomies = {}
-  const buildTaxonomy = meta => (meta || '').split(',')
-    .map(k => k.trim()).filter(k => k)
   const X = cnf.kind?.taxonomies || []
 
-  getPaths(dir).map(path => {
+  getPosts(dir).map(path => {
     const Post = read(parse(path), names)
 
     X.forEach(taxonomy => {
@@ -164,7 +159,7 @@ import(cli._[0]).then(mod => {
   })
 
   //Read data
-  const Posts = getPaths(dir).map(path => {
+  const Posts = getPosts(dir).map(path => {
     const Post = read(parse(path), names)
     const {meta, ...extra} = Post
 
@@ -194,9 +189,9 @@ import(cli._[0]).then(mod => {
   //Set posts and parent
   Posts.forEach(post => {
     var parent = null
-    const d = folder(post.path)
+    const d = fbase(post.path)
     Posts.forEach(p => {
-      const e = folder(p.path)
+      const e = fbase(p.path)
       if (
         (parent == null || p.path.length > parent.path.length) &&
         e.length < d.length && d.indexOf(e) === 0
