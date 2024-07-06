@@ -36,18 +36,12 @@ An object with all the meta tags, where:
 Array of children with all itens been an object `post` with all this variables.
 In case of taxonomies items, all associated posts will be included.
 
-### count: Integer
-The number of `posts`.
-
 ### children: Object
 An object with the same content as `posts` array but with keys been the
 `slug` of each post to access an especific content.
 
 ### parents: Array
 Array of parents with all itens been an object `post` with all this variables.
-
-### level: Integer
-The number of `parents`.
 
 ### root: Object
 The first `post` in array of `parents` or the current `post` if it is the root.

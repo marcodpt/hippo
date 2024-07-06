@@ -186,10 +186,8 @@ import(cli._[0]).then(mod => {
     Post.folder = getDir(Post.path)
     Post.relative = ''
     Post.posts = []
-    Post.count = 0
     Post.children = {}
     Post.parents = []
-    Post.level = 0
     Post.root = null
     Post.parent = null
 
@@ -228,7 +226,6 @@ import(cli._[0]).then(mod => {
       p = p.parent
     }
     post.parents.reverse()
-    post.level = post.parents.length
     post.root = post.parents[0] || post
 
     Object.keys(Taxonomies).forEach(slug => {
@@ -244,8 +241,6 @@ import(cli._[0]).then(mod => {
       ...C,
       [slugify(p.title)]: p
     }), {})
-    const n = post.posts.length
-    post.count = n
   })
 
   if (typeof cnf.render == 'function') {

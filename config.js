@@ -22,6 +22,7 @@ export default ({
     if (isAuthor) {
       Post.content = main.textContent
     }
+    Post.count = posts.length
     Post.css = isAuthor ? ' d-none' : ''
     Post.date = date ? new Date(date).toLocaleDateString(lang) : date
     Post.description = main.querySelector('p')?.textContent
