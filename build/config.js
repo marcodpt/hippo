@@ -10,24 +10,19 @@ export default ({
     email: 'user@mail.com',
     icons: [
       {
-        title: 'Facebook',
-        icon: 'facebook-f',
-        url: 'https://www.facebook.com'
+        title: 'Home Page',
+        icon: 'fa-solid fa-house',
+        url: 'https://marcodpt.github.io/hippo'
       },
       {
-        title: 'Instagram',
-        icon: 'instagram',
-        url: 'https://www.instagram.com'
+        title: 'GitHub',
+        icon: 'fa-brands fa-github',
+        url: 'https://github.com/marcodpt/hippo'
       },
       {
-        title: 'Twitter',
-        icon: 'twitter',
-        url: 'https://twitter.com'
-      },
-      {
-        title: 'YouTube',
-        icon: 'youtube',
-        url: 'https://www.youtube.com'
+        title: 'Rss Feed',
+        icon: 'fa-solid fa-rss',
+        url: 'https://www.rssboard.org/'
       }
     ]
   }
