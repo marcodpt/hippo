@@ -1,11 +1,11 @@
-import plugin from '../plugins/news/index.js'
+import plugin from '../plugins/newspaper/index.js'
 
 export default ({
   plugin,  
-  template: Deno.readTextFileSync('plugins/news/templates/bootstrap.html'),
+  template: Deno.readTextFileSync('plugins/newspaper/templates/bootstrap.html'),
   title: 'Blog',
-  url: 'https://marcodpt.github.io/hippo/',
-  dir: 'docs',
+  url: 'https://marcodpt.github.io/hippo/newspaper/',
+  dir: 'docs/newspaper',
   global: {
     email: 'user@mail.com',
     icons: [
