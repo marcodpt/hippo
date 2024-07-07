@@ -1,6 +1,14 @@
 export default ({
   sort: ['index', '-date', '-size'],
   taxonomies: ['tags', 'authors'],
+  default: {
+    date: new Date().toISOString().substr(0, 10),
+    tags: '',
+    authors: '',
+    'og:image': 'image.jpg',
+    index: '',
+    size: ''
+  },
   render: Post => {
     const {meta, main, lang, folder, path, posts} = Post
     const {date} = meta

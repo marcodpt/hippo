@@ -1,19 +1,11 @@
-import kind from '../kinds/blog/index.js'
+import plugin from '../plugins/news/index.js'
 
 export default ({
-  kind,  
-  template: Deno.readTextFileSync('kinds/blog/templates/bootstrap.html'),
+  plugin,  
+  template: Deno.readTextFileSync('plugins/news/templates/bootstrap.html'),
   title: 'Blog',
   url: 'https://marcodpt.github.io/hippo/',
   dir: 'docs',
-  default: {
-    date: new Date().toISOString().substr(0, 10),
-    tags: '',
-    authors: '',
-    'og:image': 'image.jpg',
-    index: '',
-    size: ''
-  },
   global: {
     email: 'user@mail.com',
     icons: [

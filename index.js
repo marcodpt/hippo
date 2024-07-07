@@ -30,6 +30,10 @@ if (cli.h === true || cli.help === true || !cli._[0] || !existsSync(cli._[0], {
 var scope
 import('./'+cli._[0]).then(mod => {
   const cnf = mod.default
+  const D = {
+    ...(cnf.plugin?.default || {}),
+    ...(cnf.default || {})
+  }
   const template = build(cnf.template || rawTheme)
   const base = {
     title: cnf.title,
@@ -37,7 +41,7 @@ import('./'+cli._[0]).then(mod => {
     base: cnf.url
   }
   const dir = cnf.dir
-  const names = Object.keys(cnf.default)
+  const names = Object.keys(D)
 
   const createFile = (dir, data, force) => {
     Deno.mkdirSync(dir, {recursive: true})
@@ -66,7 +70,7 @@ import('./'+cli._[0]).then(mod => {
         ...base,
         meta: names.reduce((M, name) => ({
           ...M,
-          [name]: cnf.default[name]
+          [name]: D[name]
         }), {})
       })))
     }
@@ -135,7 +139,7 @@ import('./'+cli._[0]).then(mod => {
 
   //Cleanup, fix and build taxonomies
   const Taxonomies = {}
-  const X = cnf.kind?.taxonomies || []
+  const X = cnf.plugin?.taxonomies || []
 
   getPosts(dir).map(path => {
     const Post = read(parse(path), names)
@@ -184,7 +188,7 @@ import('./'+cli._[0]).then(mod => {
 
     return Post
   })
-  sort(Posts, cnf.sort || cnf.kind?.sort || [])
+  sort(Posts, cnf.sort || cnf.plugin?.sort || [])
 
   //Set posts and parent
   Posts.forEach(post => {
@@ -229,9 +233,9 @@ import('./'+cli._[0]).then(mod => {
     })
   })
 
-  if (typeof cnf.kind?.render == 'function') {
+  if (typeof cnf.plugin?.render == 'function') {
     Posts.forEach(post => {
-      cnf.kind?.render(post)
+      cnf.plugin?.render(post)
     })
   }
 
