@@ -6,7 +6,7 @@ export default ({
   title: 'Newspaper',
   url: 'https://marcodpt.github.io/hippo/newspaper/',
   dir: 'docs/newspaper',
-  global: {
+  settings: {
     email: 'user@mail.com',
     icons: [
       {

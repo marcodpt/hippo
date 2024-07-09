@@ -6,7 +6,7 @@ export default ({
   title: 'Blog',
   url: 'https://marcodpt.github.io/hippo/blog/',
   dir: 'docs/blog',
-  global: {
+  settings: {
     nav: [
       {
         title: 'Home',

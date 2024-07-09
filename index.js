@@ -177,7 +177,7 @@ import('./'+cli._[0]).then(mod => {
     })
 
     Post.data = {...meta}
-    Post.global = cnf.global
+    Post.settings = cnf.settings
     Post.path = path.substr(dir.length+1)
     Post.folder = folder(Post.path)
     Post.posts = []
