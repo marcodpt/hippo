@@ -3,7 +3,7 @@ import plugin from '../plugins/newspaper/index.js'
 export default ({
   plugin,  
   template: Deno.readTextFileSync('plugins/newspaper/templates/bootstrap.html'),
-  title: 'Blog',
+  title: 'Newspaper',
   url: 'https://marcodpt.github.io/hippo/newspaper/',
   dir: 'docs/newspaper',
   global: {

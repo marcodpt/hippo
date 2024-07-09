@@ -10,8 +10,7 @@ import {
   parse,
   fbase,
   folder,
-  buildTaxonomy,
-  rawTheme
+  buildTaxonomy
 } from './js/lib.js'
 import save from './js/save.js'
 import {parse as parseArgs} from "https://deno.land/std/flags/mod.ts"
@@ -34,7 +33,7 @@ import('./'+cli._[0]).then(mod => {
     ...(cnf.plugin?.default || {}),
     ...(cnf.default || {})
   }
-  const template = build(cnf.template || rawTheme)
+  const template = build(cnf.template)
   const base = {
     title: cnf.title,
     lang: cnf.lang,

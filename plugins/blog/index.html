@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+  </head>
+  <body>
+    <nav with:="global">
+      <template each:="nav">
+        <a href:="url" text:="title"></a>
+        <span not:="last">|</span>
+      </template>
+    </nav>
+    <h1 text:="title"></h1>
+    <main></main>
+    <div each:="posts">
+      <a href:="path" text:="title"></a>
+      <span if:="date">-</span>
+      <time if:="date" text:="date"></time>
+    </div>
+  </body>
+</html>
