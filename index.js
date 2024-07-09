@@ -13,6 +13,7 @@ import {
   buildTaxonomy
 } from './js/lib.js'
 import save from './js/save.js'
+import rss from './js/rss.js'
 import {parse as parseArgs} from "https://deno.land/std/flags/mod.ts"
 import {existsSync} from "https://deno.land/std@0.224.0/fs/exists.ts";
 
@@ -236,6 +237,13 @@ import('./'+cli._[0]).then(mod => {
     Posts.forEach(post => {
       cnf.plugin?.render(post)
     })
+  }
+
+  if (cnf.rss) {
+    Deno.writeTextFileSync(
+      dir+'/'+(typeof cnf.rss == 'string' ? cnf.rss : 'rss.xml'), 
+      rss(cnf, Posts)
+    )
   }
 
   //Render

@@ -4,8 +4,10 @@ export default ({
   plugin,  
   template: Deno.readTextFileSync('plugins/blog/index.html'),
   title: 'Blog',
+  description: 'A simple plugin that can be used with any classless css framework.',
   url: 'https://marcodpt.github.io/hippo/blog/',
   dir: 'docs/blog',
+  rss: true,
   settings: {
     nav: [
       {
@@ -21,7 +23,7 @@ export default ({
       },
       {
         title: 'Rss Feed',
-        url: 'https://www.rssboard.org/',
+        url: 'https://marcodpt.github.io/hippo/blog/rss.xml',
         last: true
       }
     ]

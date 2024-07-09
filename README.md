@@ -2,14 +2,7 @@
 A SSG for Deno
 
 ## TODO
- - rss/atom feed
  - documentation/book theme
-
-## run
-```
-deno run --allow-read --allow-write --allow-run --allow-env index.js build/newspaper.js
-deno run --allow-read --allow-write --allow-run --allow-env index.js build/blog.js
-```
 
 ## post: Object
 A variable associated to every file named `index.html` in the site directory.

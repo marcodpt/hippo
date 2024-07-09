@@ -4,8 +4,10 @@ export default ({
   plugin,  
   template: Deno.readTextFileSync('plugins/newspaper/templates/bootstrap.html'),
   title: 'Newspaper',
+  description: 'A robust plugin for newspapers, magazines and blogs.',
   url: 'https://marcodpt.github.io/hippo/newspaper/',
   dir: 'docs/newspaper',
+  rss: true,
   settings: {
     email: 'user@mail.com',
     icons: [
@@ -21,8 +23,8 @@ export default ({
       },
       {
         title: 'Rss Feed',
-        icon: 'fa-solid fa-rss',
-        url: 'https://www.rssboard.org/'
+        icon: 'fa-solid fa-square-rss',
+        url: 'https://marcodpt.github.io/hippo/newspaper/rss.xml'
       }
     ]
   }
