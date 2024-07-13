@@ -43,15 +43,16 @@ import('./'+cli._[0]).then(mod => {
   const dir = cnf.dir
   const names = Object.keys(D)
 
-  const createFile = (dir, data, force) => {
+  const createFile = (path, data, force) => {
+    const dir = folder(path)
     Deno.mkdirSync(dir, {recursive: true})
-    if (force || !existsSync(`${dir}/index.html`)) {
-      save(`${dir}/index.html`, build(write({
+    if (force || !existsSync(path)) {
+      save(path, build(write({
         ...base,
         ...data
       })))
       if (!force) {
-        console.log(`NEW FILE: ${dir}/index.html`)
+        console.log(`NEW FILE: ${path}`)
       }
     }
   }
@@ -60,11 +61,11 @@ import('./'+cli._[0]).then(mod => {
   //Create, edit, and save new file
   if (cli._[1]) {
     var path = ''
-    if (existsSync(cli._[1], {isFile: true})) {
+    if (cli._[1].indexOf('$') < 0 && existsSync(cli._[1], {isFile: true})) {
       path = cli._[1]
       save(path, build(write(read(parse(path), names))))
     } else {
-      scope.directory = cli._[1]
+      scope.newFile = cli._[1]
       path = '/tmp/hippo.html'
       save(path, build(write({
         ...base,
@@ -88,11 +89,11 @@ import('./'+cli._[0]).then(mod => {
     names,
     createFile,
     path,
-    directory
+    newFile
   } = scope
-  if (directory) {
+  if (newFile) {
     const data = read(parse(path), names)
-    createFile(directory+'/'+slugify(data.title), data)
+    createFile(newFile.replace('$', slugify(data.title)), data, true)
   }
   console.log('BUILDING: '+cnf.dir)
 
@@ -149,13 +150,13 @@ import('./'+cli._[0]).then(mod => {
       if (Taxonomies[slug] == null) {
         Taxonomies[slug] = {}
       }
-      createFile(dir+'/'+slug, {
+      createFile(dir+'/'+slug+'/index.html', {
         title: taxonomy
       })
       buildTaxonomy(Post.meta[taxonomy]).forEach(item => {
         const sluged = slugify(item)
         Taxonomies[slug][sluged] = []
-        createFile(dir+'/'+slug+'/'+sluged, {
+        createFile(dir+'/'+slug+'/'+sluged+'/index.html', {
           title: item
         })
       })
