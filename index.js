@@ -120,20 +120,12 @@ import('./'+cli._[0]).then(mod => {
       }
     }, {})
 
-    if (doc.body.querySelector('main')) {
-      doc.body.childNodes.forEach(child => {
-        const tag = tagName(child)
-        if (tag && tag != 'main') {
-          doc.body.removeChild(child)
-        }
-      })
-    } else {
-      const m = template.querySelector('main')?.cloneNode(false) ||
-        doc.createElement('main')
-      m.innerHTML = doc.body.innerHTML
-      doc.body.innerHTML = ''
-      doc.body.appendChild(m)
-    }
+    const main = doc.body.querySelector('main')
+    const m = template.querySelector('main')?.cloneNode(false) ||
+      doc.createElement('main')
+    m.innerHTML = main ? main.innerHTML : doc.body.innerHTML
+    doc.body.innerHTML = ''
+    doc.body.appendChild(m)
 
     save(path, doc)
   })

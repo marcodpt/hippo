@@ -49,16 +49,17 @@
       </div>
     </nav>
     <template id="tree-view">
-      <ol if:="count" class="list-group list-group-numbered b-0">
+      <ol
+        if:="count"
+        class="list-group list-group-flush list-group-numbered b-0"
+      >
         <li each:="posts" class="list-group-item b-0">
-          <div class="ms-2">
-            <a href:="path" text:="title"></a>
-            <tree-view bind:=""></tree-view>
-          </div>
+          <a href:="path" text:="title"></a>
+          <tree-view bind:=""></tree-view>
         </li>
       </ol>
     </template>
-    <div class="container row">
+    <div class="container row my-5">
       <div with:="root" class="col-md-3 col-xs-12">
         <tree-view bind:=""></tree-view>
       </div>

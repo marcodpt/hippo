@@ -6,7 +6,7 @@ export default ({
   title: 'Hippo SSG',
   description: 'A SSG for Deno.',
   lang: 'en',
-  url: '/hippo/docs/',
+  url: 'https://marcodpt.github.io/hippo/docs/',
   dir: 'docs/docs',
   rss: true,
   settings: {

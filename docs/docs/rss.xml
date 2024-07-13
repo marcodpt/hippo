@@ -3,5 +3,5 @@
   <channel>
     <title>Hippo SSG</title>
     <description>A SSG for Deno.</description>
-    <link>/hippo/docs/</link></channel>
+    <link>https://marcodpt.github.io/hippo/docs/</link></channel>
 </rss>
