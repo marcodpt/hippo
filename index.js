@@ -93,7 +93,10 @@ import('./'+cli._[0]).then(mod => {
   } = scope
   if (newFile) {
     const data = read(parse(path), names)
-    createFile(newFile.replace('$', slugify(data.title)), data, true)
+    createFile(newFile.replace('$', slugify(data.title)), {
+      ...data,
+      base: null
+    }, true)
   }
   console.log('BUILDING: '+cnf.dir)
 
@@ -196,6 +199,9 @@ import('./'+cli._[0]).then(mod => {
         parent = p
       }
     })
+    const index = Posts.indexOf(post)
+    post.previous = Posts[index - 1]
+    post.next = Posts[index + 1]
     post.parent = parent
     if (parent) {
       post.parent.posts.push(post)

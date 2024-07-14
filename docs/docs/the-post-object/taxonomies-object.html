@@ -4,9 +4,9 @@
     <meta charset="utf-8"/>
     <meta http-equiv="x-ua-compatible" content="ie=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="index" content="009"/>
+    <meta name="index" content="011"/>
     <base href="https://marcodpt.github.io/hippo/docs/"/>
-    <title>root: Object</title>
+    <title>taxonomies: Object</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico"/>
     <link
       rel="stylesheet"
@@ -65,18 +65,18 @@
     </nav>
     <div class="container row my-3">
       <div class="col-md-9 col-xs-12 order-md-last mb-3">
-        <h1>root: Object</h1>
+        <h1>taxonomies: Object</h1>
         <main>
-          <p>The first <code>post</code> in array of <code>parents</code> or the current <code>post</code> if it is the root.</p>
+          <p>Taxonomies declared in the <code>post's</code> <code>meta</code> tag, where:</p>
+          <ul>
+            <li>The <code>keys</code> are the name of the taxonomy.</li>
+            <li>The <code>values</code> are an array of <code>post</code> objects, where each <code>item</code> is the automatically generated post for the taxonomy item.</li>
+          </ul>
         </main>
         <div>
-          <a href="the-post-object/parents-array.html">
+          <a href="the-post-object/parent-object.html">
             <i class="fa-solid fa-angle-left"></i>
-            parents: Array
-          </a>
-          <a href="the-post-object/parent-object.html" class="float-end">
             parent: Object
-            <i class="fa-solid fa-angle-right"></i>
           </a>
         </div>
       </div>

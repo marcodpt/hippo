@@ -4,8 +4,9 @@ export default ({
     index: '001'
   },
   render: Post => {
-    const {meta, posts, parents} = Post
-    Post.index = parseInt(meta.index)
-    Post.count = posts.length
+    Post.count = Post.posts.length
+    Post.index = Post.parents.map(({meta}) => meta.index)
+      .concat(Post.meta.index)
+      .filter(i => i).map(i => parseInt(i)).join('.')
   }
 })
