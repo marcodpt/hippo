@@ -41,8 +41,8 @@
         if:="count"
         class="list-group"
       >
-        <li each:="posts" class="list-group-item border-0">
-          <span text:="index"></span>
+        <li each:="posts" class="list-group-item border-0 py-1">
+          <small text:="index"></small>
           <a href:="path" text:="title"></a>
           <tree-view bind:=""></tree-view>
         </li>
@@ -50,18 +50,33 @@
     </template>
     <div class="container row my-3">
       <div class="col-md-9 col-xs-12 order-md-last mb-3">
-        <h1 text:="title"></h1>
+        <nav if:="parent" aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li
+              each:="parents"
+              class="breadcrumb-item"
+            >
+              <a href:="path" text:="title"></a>
+            </li>
+          </ol>
+        </nav>
+        <h1>
+          <small text:="index"></small>
+          <template text:="title"></template>
+        </h1>
         <main>
         </main>
         <div>
-          <a with:="previous" href:="path">
+          <span with:="previous">
             <i class="fa-solid fa-angle-left"></i>
-            <template text:="title"></template>
-          </a>
-          <a with:="next" href:="path" class="float-end">
-            <template text:="title"></template>
+            <small text:="index"></small>
+            <a href:="path" text:="title"></a>
+          </span>
+          <span with:="next" class="float-end">
+            <small text:="index"></small>
+            <a href:="path" text:="title"></a>
             <i class="fa-solid fa-angle-right"></i>
-          </a>
+          </span>
         </div>
       </div>
       <div
