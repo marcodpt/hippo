@@ -39,7 +39,8 @@ const sort = (Data, Rule) => {
   if (!(Rule instanceof Array)) {
     return
   }
-  Data.sort((a, b) => Rule.reduce((r, k) => {
+
+  const cmp = (a, b) => Rule.reduce((r, k) => {
     const s = k.substr(0, 1)
     const i = s == '-' ? -1 : 1
     if (s == '-' || s == '+') {
@@ -47,7 +48,24 @@ const sort = (Data, Rule) => {
     }
     return r ? r :
       i * (a.meta[k] > b.meta[k] ? 1 : b.meta[k] > a.meta[k] ? -1 : 0)
-  }, 0))
+  }, 0)
+
+  const check = (a, b) =>
+    a != null && b == null ? 1 :
+    a == null && b != null ? -1 :
+    a == null && b == null ? 0 : cmp(a, b)
+
+  Data.sort((a, b) => {
+    const X = a.parents.concat(a)
+    const Y = b.parents.concat(b)
+    const m = X.length
+    const n = Y.length
+
+    for (var i = 0, res = 0; (i < n || i < m) && res == 0; i++) {
+      res = check(X[i], Y[i])
+    }
+    return res
+  })
 }
 
 const read = (doc, names) => ({

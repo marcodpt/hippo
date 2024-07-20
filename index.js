@@ -184,6 +184,7 @@ import('./'+cli._[0]).then(mod => {
 
     return Post
   })
+
   sort(Posts, cnf.sort || cnf.plugin?.sort || [])
 
   //Set posts and parent
@@ -199,9 +200,6 @@ import('./'+cli._[0]).then(mod => {
         parent = p
       }
     })
-    const index = Posts.indexOf(post)
-    post.previous = Posts[index - 1]
-    post.next = Posts[index + 1]
     post.parent = parent
     if (parent) {
       post.parent.posts.push(post)
@@ -213,6 +211,7 @@ import('./'+cli._[0]).then(mod => {
       )).reduce((T, Posts) => T.concat(Posts), [])
     })
   })
+
   Posts.forEach(post => {
     var p = post.parent
     while (p) {
@@ -230,6 +229,14 @@ import('./'+cli._[0]).then(mod => {
         }
       })
     })
+  })
+
+  //set next and previous
+  sort(Posts, cnf.sort || cnf.plugin?.sort || [])
+  Posts.forEach(post => {
+    const index = Posts.indexOf(post)
+    post.previous = Posts[index - 1]
+    post.next = Posts[index + 1]
   })
 
   if (typeof cnf.plugin?.render == 'function') {
