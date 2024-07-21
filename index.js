@@ -37,8 +37,7 @@ import('./'+cli._[0]).then(mod => {
   const template = build(cnf.template)
   const base = {
     title: cnf.title,
-    lang: cnf.lang,
-    base: cnf.url
+    lang: cnf.lang
   }
   const dir = cnf.dir
   const names = Object.keys(D)
@@ -84,7 +83,6 @@ import('./'+cli._[0]).then(mod => {
   const {
     cnf,
     template,
-    base,
     dir,
     names,
     createFile,
@@ -93,10 +91,7 @@ import('./'+cli._[0]).then(mod => {
   } = scope
   if (newFile) {
     const data = read(parse(path), names)
-    createFile(newFile.replace('$', slugify(data.title)), {
-      ...data,
-      base: null
-    }, true)
+    createFile(newFile.replace('$', slugify(data.title)), data, true)
   }
   console.log('BUILDING: '+cnf.dir)
 
@@ -254,18 +249,16 @@ import('./'+cli._[0]).then(mod => {
 
   //Render
   Posts.forEach(post => {
-    const doc = build(write(post))
     post.url = cnf.url
 
-    const target = template.documentElement.cloneNode(true)
+    const tpl = build(cnf.template)
+    const target = tpl.documentElement
     target.querySelectorAll('body > template[id*="-"]').forEach(customTag => {
       customTag.parentNode.removeChild(customTag)
     })
-    target.querySelector('main').innerHTML =
-      (doc.body.querySelector('main') || doc.body).innerHTML
-    doc.documentElement.replaceWith(target)
+    target.querySelector('main').innerHTML = post.main.innerHTML
     compile(target, null, template)(post)
 
-    save(dir+'/'+post.path, doc)
+    save(dir+'/'+post.path, tpl)
   })
 })
