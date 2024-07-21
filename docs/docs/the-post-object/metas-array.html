@@ -4,8 +4,9 @@
     <meta charset="utf-8"/>
     <meta http-equiv="x-ua-compatible" content="ie=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="index" content="012"/>
     <base href="https://marcodpt.github.io/hippo/docs/"/>
-    <title>Hippo SSG</title>
+    <title>metas: Array</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico"/>
     <link
       rel="stylesheet"
@@ -64,30 +65,33 @@
     </nav>
     <div class="container row my-3">
       <div class="col-md-9 col-xs-12 order-md-last mb-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="index.html">Hippo SSG</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="the-post-object/index.html">The Post Object</a>
+            </li>
+          </ol>
+        </nav>
         <h1>
-          <small></small>
-          Hippo SSG
+          <small>(2.12)</small>
+          metas: Array
         </h1>
         <main>
-          <p><code>Hippo</code> is a static website generator written in <a href="https://deno.com/">Deno</a>, and uses a radically new approach to static site generators.</p>
-          <p>It does not have a folder with the content and a folder with the website, the website itself is the content.</p>
-          <p>It does not use any markup language, instead it uses <code>HTML</code> pages.</p>
-          <p>Think of <code>Hippo</code> as a website editor.</p>
-          <p>It will fetch the <code>meta</code> tags from the page header for variables such as <code>author</code>, <code>date</code>, <code>tags</code>, etc.</p>
-          <p>And it will consider the <code>main</code> tag as the content of the page.</p>
-          <p>When writing or editing a post, it will only bring this information to the text editor.</p>
-          <p>When building the website, it will combine the content of the page with the content of the chosen theme for each page, in addition to automatically generating the pages associated with each previously defined <code>taxonomy</code>.</p>
-          <p><code>Hippo</code> never touches the content of a post, or the variables defined in the page <code>head</code>.</p>
-          <p>The rest of the <code>HTML</code> page is generated according to the theme, and the user's menu and footer settings.</p>
-          <p><code>Themes</code> are divided into a <code>plugin</code> (which applies the necessary transformations to the variables and defines the <code>taxonomies</code>) and a single file <code>template</code> (written in <code>HTML</code>) that uses the variables to generate the page layout.</p>
-          <p>The result of this separation between page architecture and layout are extremely flexible and customizable <code>themes</code>.</p>
-          <p>Welcome to <code>Hippo</code>!</p>
+          <p>An `array` with all the `meta` tags, where:</p>
+          <ul>
+            <li>each `item` is an `object`.</li>
+            <li>the `item` object property `name` refers to `meta` `name` attribute</li>
+            <li>the `item` object property `content` refers to `meta` `content` attribute</li>
+          </ul>
         </main>
         <div>
-          <span class="float-end">
-            <small>(1)</small>
-            <a href="design-choices/index.html">Design Choices</a>
-            <i class="fa-solid fa-angle-right"></i>
+          <span>
+            <i class="fa-solid fa-angle-left"></i>
+            <small>(2.11)</small>
+            <a href="the-post-object/taxonomies-object.html">taxonomies: Object</a>
           </span>
         </div>
       </div>

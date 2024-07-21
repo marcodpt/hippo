@@ -70,7 +70,7 @@ const sort = (Data, Rule) => {
 
 const read = (doc, names) => {
   const R = {
-    title: doc.title,
+    title: doc.title.split(' - ')[0],
     lang: doc.documentElement.getAttribute('lang'),
     main: doc.body.querySelector('main') || doc.body,
     metas: (names || [])
@@ -89,24 +89,6 @@ const read = (doc, names) => {
 
   return R
 }
-
-const write = ({
-  title,
-  lang,
-  base,
-  main,
-  meta
-}) => `<!DOCTYPE html>
-<html${lang ? ` lang="${lang}"` : ''}>
-  <head>
-    ${Object.keys(meta).map(name =>
-      `<meta name="${name}" content="${meta[name]}"/>`
-    ).join('\n    ')}
-    ${base ? `<base href="${base}">` : ''}
-    <title>${title}</title>
-  </head>
-  <body>${(main ? main.innerHTML : '').trim()}</body>
-</html>`
 
 const folder = path => {
   const P = path.split('/').filter(p => p && p != '.')
@@ -149,7 +131,6 @@ export {
   getPosts,
   sort,
   read,
-  write,
   folder,
   fbase,
   buildTaxonomy
