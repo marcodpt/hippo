@@ -254,30 +254,16 @@ import('./'+cli._[0]).then(mod => {
 
   //Render
   Posts.forEach(post => {
-    const doc = build(write({
-      base: cnf.url,
-      ...post
-    }))
+    const doc = build(write(post))
+    post.url = cnf.url
 
-    var el = template.head.querySelector('title')
-    while (el?.previousElementSibling) {
-      el = el.previousElementSibling
-      doc.head.prepend(el.cloneNode())
-    }
-
-    el = template.head.querySelector('title')
-    while (el?.nextElementSibling) {
-      el = el.nextElementSibling
-      doc.head.append(el.cloneNode())
-    }
-
-    const target = template.body.cloneNode(true)
+    const target = template.documentElement.cloneNode(true)
     target.querySelectorAll('body > template[id*="-"]').forEach(customTag => {
-      target.removeChild(customTag)
+      customTag.parentNode.removeChild(customTag)
     })
     target.querySelector('main').innerHTML =
       (doc.body.querySelector('main') || doc.body).innerHTML
-    doc.body.replaceWith(target)
+    doc.documentElement.replaceWith(target)
     compile(target, null, template)(post)
 
     save(dir+'/'+post.path, doc)

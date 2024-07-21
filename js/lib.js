@@ -68,23 +68,27 @@ const sort = (Data, Rule) => {
   })
 }
 
-const read = (doc, names) => ({
-  title: doc.title,
-  lang: doc.documentElement.getAttribute('lang'),
-  main: doc.body.querySelector('main') || doc.body,
-  meta: (names || [])
-    .map(k => doc.head.querySelector(`meta[name="${k}"]`))
-    .filter(meta => meta)
-    .map(meta => ({
-      name: meta.getAttribute('name'),
-      content: meta.getAttribute('content')
-    }))
-    .filter(({content}) => content)
-    .reduce((M, {name, content}) => ({
-      ...M,
-      [name]: content
-    }), {})
-})
+const read = (doc, names) => {
+  const R = {
+    title: doc.title,
+    lang: doc.documentElement.getAttribute('lang'),
+    main: doc.body.querySelector('main') || doc.body,
+    metas: (names || [])
+      .map(k => doc.head.querySelector(`meta[name="${k}"]`))
+      .filter(meta => meta)
+      .map(meta => ({
+        name: meta.getAttribute('name'),
+        content: meta.getAttribute('content')
+      }))
+      .filter(({content}) => content)
+  }
+  R.meta = R.metas.reduce((M, {name, content}) => ({
+    ...M,
+    [name]: content
+  }), {})
+
+  return R
+}
 
 const write = ({
   title,
