@@ -59,5 +59,30 @@ quoque, ne nomen, corpore frigus. Arcton pendentem et Solis diebus portans
 abscidit linguis obstipuit transitus. Visurus pondus nemus quoque caute eodem
 ligavit, iaculantem pressus corpore fuerant magni!</p>
     </main>
+    <script>
+      window.setTheme = theme => {
+        if (theme != null) {
+          if (!theme) {
+            localStorage.removeItem("stylesheet")
+          } else {
+            localStorage.setItem("stylesheet", theme)
+          }
+        }
+
+        const link = document.head.querySelector('link[rel="stylesheet"]')
+        const href = localStorage.getItem("stylesheet")
+        if (link && !href) {
+          document.head.removeChild(link)
+        } else if (href && !link) {
+          const el = document.createElement('link')
+          el.setAttribute('rel', 'stylesheet')
+          el.setAttribute('href', href)
+          document.head.appendChild(el)
+        } else if (href && link && link.getAttribute('href') != href) {
+          link.setAttribute('href', href)
+        }
+      }
+      window.setTheme()
+    </script>
   </body>
 </html>

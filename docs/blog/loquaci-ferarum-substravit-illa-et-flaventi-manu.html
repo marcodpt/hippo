@@ -78,5 +78,30 @@ fulminis comes nostra primasque orbis <em>Cadmeida</em> movit, tot lapides, via 
 tuta Typhoea. Opposita Dianae mersis illa: sua iungat alternae: <strong>arces
 negarent</strong> altera violasse!</p>
     </main>
+    <script>
+      window.setTheme = theme => {
+        if (theme != null) {
+          if (!theme) {
+            localStorage.removeItem("stylesheet")
+          } else {
+            localStorage.setItem("stylesheet", theme)
+          }
+        }
+
+        const link = document.head.querySelector('link[rel="stylesheet"]')
+        const href = localStorage.getItem("stylesheet")
+        if (link && !href) {
+          document.head.removeChild(link)
+        } else if (href && !link) {
+          const el = document.createElement('link')
+          el.setAttribute('rel', 'stylesheet')
+          el.setAttribute('href', href)
+          document.head.appendChild(el)
+        } else if (href && link && link.getAttribute('href') != href) {
+          link.setAttribute('href', href)
+        }
+      }
+      window.setTheme()
+    </script>
   </body>
 </html>

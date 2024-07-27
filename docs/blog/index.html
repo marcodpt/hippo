@@ -91,5 +91,112 @@
       <span>-</span>
       <time>9/23/2017</time>
     </div>
+    <div>
+      <h2>Choose a classless css framework</h2>
+      <ul>
+        <li>
+          <a href="javascript:setTheme('')">Browser Default</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/water.css@2/out/light.css')"
+          >Water Css Light</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css')"
+          >Water Css Dark</a>
+        </li>
+        <li>
+          <a href="javascript:setTheme('https://unpkg.com/mvp.css')">MVP.css</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css')"
+          >Sakura Default</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/sakura.css/css/sakura-earthly.css')"
+          >Sakura Earthly</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/sakura.css/css/sakura-vader.css')"
+          >Sakura Vader</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/sakura.css/css/sakura-dark.css')"
+          >Sakura Dark</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://unpkg.com/marx-css/css/marx.min.css')"
+          >Marx</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css.min.css')"
+          >Tacit</a>
+        </li>
+        <li>
+          <a href="javascript:setTheme('https://cdn.simplecss.org/simple.css')">Simple</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css')"
+          >Pico.css</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css')"
+          >Pure</a>
+        </li>
+        <li>
+          <a href="javascript:setTheme('https://unpkg.com/chota')">Chota</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/picnic@7.1.0/picnic.min.css')"
+          >Picnic</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css')"
+          >Bootstrap</a>
+        </li>
+        <li>
+          <a
+            href="javascript:setTheme('https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css')"
+          >Bulma</a>
+        </li>
+      </ul>
+    </div>
+    <script>
+      window.setTheme = theme => {
+        if (theme != null) {
+          if (!theme) {
+            localStorage.removeItem("stylesheet")
+          } else {
+            localStorage.setItem("stylesheet", theme)
+          }
+        }
+
+        const link = document.head.querySelector('link[rel="stylesheet"]')
+        const href = localStorage.getItem("stylesheet")
+        if (link && !href) {
+          document.head.removeChild(link)
+        } else if (href && !link) {
+          const el = document.createElement('link')
+          el.setAttribute('rel', 'stylesheet')
+          el.setAttribute('href', href)
+          document.head.appendChild(el)
+        } else if (href && link && link.getAttribute('href') != href) {
+          link.setAttribute('href', href)
+        }
+      }
+      window.setTheme()
+    </script>
   </body>
 </html>

@@ -8,6 +8,7 @@
     <base if:="url" href:="url">
     <title text:="title"></title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link with:="settings" if:="style" rel="stylesheet" href:="style">
   </head>
   <body>
     <nav with:="settings">
@@ -23,5 +24,40 @@
       <span if:="date">-</span>
       <time if:="date" text:="date"></time>
     </div>
+    <template not:="parent">
+      <div with:="settings" if:="themes">
+        <h2>Choose a classless css framework</h2>
+        <ul>
+          <li each:="themes">
+            <a href:="href" text:="title"></a>
+          </li>
+        </ul>
+      </div>
+    </template>
+    <script with:="settings" if:="themes">
+      window.setTheme = theme => {
+        if (theme != null) {
+          if (!theme) {
+            localStorage.removeItem("stylesheet")
+          } else {
+            localStorage.setItem("stylesheet", theme)
+          }
+        }
+
+        const link = document.head.querySelector('link[rel="stylesheet"]')
+        const href = localStorage.getItem("stylesheet")
+        if (link && !href) {
+          document.head.removeChild(link)
+        } else if (href && !link) {
+          const el = document.createElement('link')
+          el.setAttribute('rel', 'stylesheet')
+          el.setAttribute('href', href)
+          document.head.appendChild(el)
+        } else if (href && link && link.getAttribute('href') != href) {
+          link.setAttribute('href', href)
+        }
+      }
+      window.setTheme()
+    </script>
   </body>
 </html>

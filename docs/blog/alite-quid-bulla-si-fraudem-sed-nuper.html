@@ -95,5 +95,30 @@ Diana magica planissima generum.</p>
 adpuleram, sine aequa, cur desierim pedibus. Tremat talia non nocte vocabat
 saxa: quid malleus iubentque quae, <em>et semina</em>, Victoria.</p>
     </main>
+    <script>
+      window.setTheme = theme => {
+        if (theme != null) {
+          if (!theme) {
+            localStorage.removeItem("stylesheet")
+          } else {
+            localStorage.setItem("stylesheet", theme)
+          }
+        }
+
+        const link = document.head.querySelector('link[rel="stylesheet"]')
+        const href = localStorage.getItem("stylesheet")
+        if (link && !href) {
+          document.head.removeChild(link)
+        } else if (href && !link) {
+          const el = document.createElement('link')
+          el.setAttribute('rel', 'stylesheet')
+          el.setAttribute('href', href)
+          document.head.appendChild(el)
+        } else if (href && link && link.getAttribute('href') != href) {
+          link.setAttribute('href', href)
+        }
+      }
+      window.setTheme()
+    </script>
   </body>
 </html>
