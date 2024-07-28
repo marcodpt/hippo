@@ -57,6 +57,7 @@ export default ({
         href: 'javascript:setTheme(\'https://cdn.simplecss.org/simple.css\')',
         title: 'Simple'
       }
-    ]
+    ],
+    copyright: 'Made with ❤️ with Hippo SSG'
   }
 })

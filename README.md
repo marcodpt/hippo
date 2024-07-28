@@ -1,2 +1,2 @@
-# ![](docs/favicon.ico) Hippo
-A SSG for Deno
+# ![](docs/favicon.ico) Hippo SSG
+A static site generator for Deno
