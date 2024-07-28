@@ -30,31 +30,31 @@ export default ({
     ],
     themes: [
       {
-        href: 'javascript:setTheme(\'\')',
+        href: '',
         title: 'Browser Default'
       }, {
-        href: 'javascript:setTheme(\'https://cdn.jsdelivr.net/npm/water.css@2/out/light.css\')',
+        href: 'https://cdn.jsdelivr.net/npm/water.css@2/out/light.css',
         title: 'Water Css Light'
       }, {
-        href: 'javascript:setTheme(\'https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css\')',
+        href: 'https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css',
         title: 'Water Css Dark'
       }, {
-        href: 'javascript:setTheme(\'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css\')',
+        href: 'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css',
         title: 'Sakura Default'
       }, {
-        href: 'javascript:setTheme(\'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura-earthly.css\')',
+        href: 'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura-earthly.css',
         title: 'Sakura Earthly'
       }, {
-        href: 'javascript:setTheme(\'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura-vader.css\')',
+        href: 'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura-vader.css',
         title: 'Sakura Vader'
       }, {
-        href: 'javascript:setTheme(\'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura-dark.css\')',
+        href: 'https://cdn.jsdelivr.net/npm/sakura.css/css/sakura-dark.css',
         title: 'Sakura Dark'
       }, {
-        href: 'javascript:setTheme(\'https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css.min.css\')',
+        href: 'https://cdn.jsdelivr.net/gh/yegor256/tacit@gh-pages/tacit-css.min.css',
         title: 'Tacit'
       }, {
-        href: 'javascript:setTheme(\'https://cdn.simplecss.org/simple.css\')',
+        href: 'https://cdn.simplecss.org/simple.css',
         title: 'Simple'
       }
     ],
