@@ -46,8 +46,10 @@ const sort = (Data, Rule) => {
     if (s == '-' || s == '+') {
       k = k.substr(1)
     }
+    const x = {...a, ...a.meta}
+    const y = {...b, ...b.meta}
     return r ? r :
-      i * (a.meta[k] > b.meta[k] ? 1 : b.meta[k] > a.meta[k] ? -1 : 0)
+      i * (x[k] > y[k] ? 1 : y[k] > x[k] ? -1 : 0)
   }, 0)
 
   const check = (a, b) =>

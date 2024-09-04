@@ -145,9 +145,16 @@ getPosts(dir).map(path => {
   })
 })
 
+const Tp = Object.keys(Taxonomies).map(key => `${key}/index.html`)
 //Read data
 const Posts = getPosts(dir).map(path => {
   const Post = read(parse(path), names)
+  Object.keys(Post.meta).forEach(k => {
+    if (typeof D[k] == 'number') {
+      const v = Post.meta[k]
+      Post.meta[k] = (/^\d+$/.test(v) ? parseInt : parseFloat)(v)
+    }
+  })
   const {meta, ...extra} = Post
 
   Post.taxonomies = {}
@@ -162,6 +169,7 @@ const Posts = getPosts(dir).map(path => {
 
   Post.settings = cnf.settings
   Post.path = path.substr(dir.length+1)
+  Post.isTaxonomy = Tp.indexOf(Post.path) >= 0
   Post.folder = folder(Post.path)
   Post.posts = []
   Post.parents = []
@@ -206,6 +214,7 @@ Posts.forEach(post => {
   }
   post.parents.reverse()
   post.root = post.parents[0] || post
+  post.count = post.posts.length
 
   Object.keys(Taxonomies).forEach(slug => {
     const T = Taxonomies[slug]
@@ -220,9 +229,11 @@ Posts.forEach(post => {
 //set next and previous
 sort(Posts, cnf.sort || cnf.plugin?.sort || [])
 Posts.forEach(post => {
+  sort(post.posts, cnf.sort || cnf.plugin?.sort || [])
   const index = Posts.indexOf(post)
   post.previous = Posts[index - 1]
   post.next = Posts[index + 1]
+  post.count = post.posts.length
 })
 
 if (typeof cnf.plugin?.render == 'function') {
